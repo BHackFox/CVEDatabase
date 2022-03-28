@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <title>CVEDatabase</title>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+      <% if(username==false){ %>
+        <div class="topnav-right">
+          <a href="/login">Login</a>
+          <a href="/register">Register</a>
+        </div>
+        <% }%>
+        <%if(username){ %>
+          <div class="topnav-right">
+            <a href="/console/">Console</a>
+            <div class="dropdown">
+              <button class="dropbtn">Account</button>
+              <div class="dropdown-content">
+                <a href="/account/"><%=username %></a>
+
+              </div>
+            </div>
+          </div>
+        <%}%>
+      </div>
+  </head>
+  <body>
+    <div class="home">
+
+    </div>
+    <div class="footer">
+      <h1>ciao</h1>
+    </div>
+  </body>
+</html>
