@@ -54,7 +54,6 @@ app.get("/",(req,res)=>{
   req.session.error = "";
   if (req.user) {
     console.log(req.user)
-    //res.send("Connesso");
     res.render('home',{username:req.user.Username});
   }
   else {
@@ -106,8 +105,8 @@ app.post("/register",async (req,res)=>{
   }
 })
 
-app.get("/create",(req,res)=>{
-  createTable(connection);
+app.get("/recreate",async (req,res)=>{
+  await createTable(connection);
   console.log("Fatto");
   res.send("Ok")
 })

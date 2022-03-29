@@ -53,8 +53,8 @@ def loginUser(username,password):
 
 def registerUser(username,email,password):
     data = {"username":username,"email":email,"password":password}
-    res = requests.post(ip+"newUser",data=data)
-    print(res)
+    res = requests.post(ip+"register",data=data)
+    print(res.text)
 
 if __name__ == '__main__':
     if sys.argv[1].lower() == "create":
