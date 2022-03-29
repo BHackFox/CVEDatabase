@@ -11,6 +11,7 @@ async function run(connection){
     Name VARCHAR(30),
     Surname VARCHAR(30),
     TimeAccount TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
+
     `CREATE TABLE IF NOT EXISTS CVE(
     id INT PRIMARY KEY AUTO_INCREMENT,
     CVEName VARCHAR(30) NOT NULL,
@@ -22,7 +23,8 @@ async function run(connection){
     CVENote TEXT,
     CVEConfermation BOOLEAN DEFAULT FALSE,
     TimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
-    `CREATE TABLE IF NOT EXISTS Group(
+
+    `CREATE TABLE Group(
     id INT PRIMARY KEY AUTO_INCREMENT,
     GroupName VARCHAR(30) NOT NULL,
     GroupDescription TEXT NOT NULL,
@@ -30,11 +32,13 @@ async function run(connection){
     GroupMembers INT DEFAULT 0 NOT NULL,
     GroupTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`];
     for (var i = 0; i < createTABLES.length; i++) {
-      connection.query(createTABLES[i],function(err,results,fields){
-        if(err){
-          throw err;
-        }
-      });
+      new Promise((resolve,reject)=>{
+        connection.query(createTABLES[i],function(err,results,fields){
+          if(err){
+            throw err;
+          }
+        });
+      })
     }
 }
 

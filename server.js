@@ -106,9 +106,15 @@ app.post("/register",async (req,res)=>{
 })
 
 app.get("/recreate",async (req,res)=>{
-  await createTable(connection);
-  console.log("Fatto");
-  res.send("Ok")
+  try {
+    await createTable(connection);
+  } catch (e) {
+    console.error(e);
+    res.send("NO")
+  } finally {
+    console.log("Fatto");
+    res.send("Ok")
+  }
 })
 
 
