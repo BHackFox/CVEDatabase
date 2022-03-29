@@ -29,9 +29,10 @@
       </div>
   </head>
   <body>
-    <div class="home">
-
-    </div>
+  <%for(var i=0; i<cves.length; i++){%>
+      <h1><%=cves[i].CVEName%></h1>
+      <h4><%=cves[i].CVEUserCreate%></h4>
+  <%}%>
     <div class="footer">
       <h1>ciao</h1>
     </div>

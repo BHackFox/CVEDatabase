@@ -19,10 +19,13 @@ var connection = mysql.createConnection({
 const infoLogin = require('./user/info-login');
 const createTable = require('./user/createTable');
 const insertUser = require('./mysql/POST/insertUser');
+const account = require('./routes/account');
+const group = require('./routes/group');
+const cve = require('./routes/cve');
 
 initializePassport(passport,
   async username => await infoLogin(connection,`SELECT Password,id FROM Users WHERE Username = "${username}"`),
-  async id => await infoLogin(connection,`SELECT id FROM Users WHERE id = "${id}"`)
+  async id => await infoLogin(connection,`SELECT Username FROM Users WHERE id = "${id}"`)
 )
 
 app.use(express.static('public'))
@@ -53,7 +56,6 @@ app.use(methodOverride('_method'))
 app.get("/",(req,res)=>{
   req.session.error = "";
   if (req.user) {
-    console.log(req.user)
     res.render('home',{username:req.user.Username});
   }
   else {
@@ -75,6 +77,7 @@ app.post('/login',passport.authenticate('local',{
   failureRedirect: '/login',
   failureFlash: true
 }),(req,res)=>{
+
   res.redirect(req.session.redirect)
 })
 
@@ -117,6 +120,10 @@ app.get("/recreate",async (req,res)=>{
   }
 })
 
+app.use("/account",checkAuthenticated,account);
+
+app.use("/group",checkAuthenticated,group);
+app.use("/CVE",cve);
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){

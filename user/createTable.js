@@ -12,6 +12,14 @@ async function run(connection){
     Surname VARCHAR(30),
     TimeAccount TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
 
+    `CREATE TABLE IF NOT EXISTS Groups(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    GroupName VARCHAR(30) NOT NULL,
+    GroupDescription TEXT NOT NULL,
+    GroupCreator VARCHAR(30) NOT NULL,
+    GroupMembers INT DEFAULT 1 NOT NULL,
+    GroupTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
+
     `CREATE TABLE IF NOT EXISTS CVE(
     id INT PRIMARY KEY AUTO_INCREMENT,
     CVEName VARCHAR(30) NOT NULL,
@@ -22,15 +30,8 @@ async function run(connection){
     CVELinks TEXT,
     CVENote TEXT,
     CVEConfermation BOOLEAN DEFAULT FALSE,
-    TimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
-
-    `CREATE TABLE Group(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    GroupName VARCHAR(30) NOT NULL,
-    GroupDescription TEXT NOT NULL,
-    GroupCreator VARCHAR(30) NOT NULL,
-    GroupMembers INT DEFAULT 0 NOT NULL,
-    GroupTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`];
+    TimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`
+    ];
     for (var i = 0; i < createTABLES.length; i++) {
       new Promise((resolve,reject)=>{
         connection.query(createTABLES[i],function(err,results,fields){
@@ -45,7 +46,7 @@ async function run(connection){
 
 function dumpTABLES(connection) {
   return new Promise((resolve, reject) =>{
-    connection.query(`DROP TABLE IF EXISTS Users, CVE`,function(err,results,fields){
+    connection.query(`DROP TABLE IF EXISTS Users, CVE, Groups`,function(err,results,fields){
       if (err) {
         throw err;
       }
