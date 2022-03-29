@@ -2,13 +2,13 @@
 
 function get_info(connection,data,callback){
   return new Promise((resolve, reject) =>{
-    var sql = `SELECT * FROM Users WHERE Username = "${data}" OR id = "${data}"`;
+    //var sql = `SELECT * FROM Users WHERE Username = "${data}" OR id = "${data}"`;
 
-    connection.query(sql,function(err,results){
+    connection.query(data,function(err,results){
       if(err){
         throw err;
       }
-      user = results[0];
+      //user = results[0];
       return resolve(results[0]);
     })
   })

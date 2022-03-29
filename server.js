@@ -21,8 +21,8 @@ const createTable = require('./user/createTable');
 const insertUser = require('./mysql/POST/insertUser');
 
 initializePassport(passport,
-  async username => await infoLogin(connection,username),
-  async id => await infoLogin(connection,id)
+  async username => await infoLogin(connection,`SELECT Password,id FROM Users WHERE Username = "${username}"`),
+  async id => await infoLogin(connection,`SELECT id FROM Users WHERE id = "${id}"`)
 )
 
 app.use(express.static('public'))
@@ -51,9 +51,11 @@ app.use(methodOverride('_method'))
 
 
 app.get("/",(req,res)=>{
+  req.session.error = "";
   if (req.user) {
     console.log(req.user)
-    res.render('home',{username:req.user.Username})
+    //res.send("Connesso");
+    res.render('home',{username:req.user.Username});
   }
   else {
     res.render('home',{username:false})
@@ -65,6 +67,10 @@ app.get('/login',checkNotAuthenticated,async(req,res)=>{
   res.render('login');
 })
 
+app.get('/register',checkNotAuthenticated,async(req,res)=>{
+  res.render('register',{error:req.session.error});
+})
+
 
 app.post('/login',passport.authenticate('local',{
   failureRedirect: '/login',
@@ -73,18 +79,39 @@ app.post('/login',passport.authenticate('local',{
   res.redirect(req.session.redirect)
 })
 
+app.post("/register",async (req,res)=>{
+
+  if (!req.body.username || !req.body.email || !req.body.password){
+    req.session.error = "Need Username, Email and Password!"
+    res.redirect("/register")
+  }
+  else {
+    let data = {Username:req.body.username,Email:req.body.email,Password:req.body.password};
+    req.session.error = ""
+    let user = await infoLogin(connection,`SELECT Username,Email FROM Users WHERE Username = "${req.body.username}" or Email = "${req.body.email}"`)
+    if (user){
+      console.log(user);
+      if (user.Username == req.body.username){
+        req.session.error = "Username Already in Use"
+      }
+      if (user.Email == req.body.email){
+        req.session.error = "Email Already in Use"
+      }
+      res.redirect('/register')
+    }
+    else {
+      insertUser(connection,data)
+      res.redirect('/login')
+    }
+  }
+})
+
 app.get("/create",(req,res)=>{
   createTable(connection);
   console.log("Fatto");
   res.send("Ok")
 })
 
-app.post("/newUser",(req,res)=>{
-  let data = {Username:req.body.Username,Email:req.body.Email,Password:req.body.Password};
-  console.log(data);
-  insertUser(connection,data)
-  res.send("OK")
-})
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){
