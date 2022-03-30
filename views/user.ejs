@@ -3,24 +3,24 @@
   <title>CVEDatabase</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/CVE.css" />
+    <link rel="stylesheet" type="text/css" href="css/user.css" />
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="#news">News</a>
       <a href="#contact">Contact</a>
-      <% if(username==false){ %>
+      <% if(!username.Username){ %>
         <div class="topnav-right">
           <a href="/login">Login</a>
           <a href="/register">Register</a>
         </div>
         <% }%>
-        <%if(username){ %>
+        <%if(username.Username){ %>
           <div class="topnav-right">
-            <a href="/console/">Console</a>
+            <a href="/CVE/">Console</a>
             <div class="dropdown">
               <button class="dropbtn">Account</button>
               <div class="dropdown-content">
-                <a href="/account/"><%=username %></a>
+                <a href="/account/"><%=username.Username %></a>
                 <a href="/group/">Group</a>
               </div>
             </div>
@@ -29,22 +29,15 @@
       </div>
   </head>
   <body>
-    <table id="cves">
-      <tr>
-        <td>CVE Name</td>
-        <td>CVE Title</td>
-        <td>User</td>
-        <td>Time</td>
-      </tr>
-  <%for(var i=0; i<cves.length; i++){%>
-    <tr>
-      <td><a href="<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></td>
-      <td><%=cves[i].CVETitle%></td>
-      <td><a href="../user/<%=cves[i].CVEUserCreate%>"><%=cves[i].CVEUserCreate%></a></td>
-      <td><%=cves[i].TimeCreation%></td>
-    </tr>
-  <%}%>
-  </table>
+    <div class="home">
+      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=dataobj.Username%></u></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br/></p>
+<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
+<font size="6" style="font-size: 26pt"><%=dataobj.Email%></font></p>
+<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
+<br/>
+      <h1></h1>
+    </div>
     <div class="footer">
       <h1>ciao</h1>
     </div>

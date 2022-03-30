@@ -10,6 +10,8 @@ var connection = mysql.createConnection({
     password: "fede",
     database: "CVEDatabase",
 });
+route.use(express.static('public'))
+
 
 route.get("/",async (req,res)=>{
   let data = await getGeneralQuery(connection,`SELECT * FROM CVE`)
@@ -21,9 +23,31 @@ route.get("/",async (req,res)=>{
 })
 
 route.post("/newcve",checkAuthenticated,async (req,res)=>{
-  let lol = "CVE_2022_03_29_23_48"
+  let date = new Date()
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  if (month<10) month = '0'+month
+  let day = date.getDate()
+  if (day<10) day = '0'+day
+  let hours = date.getHours()
+  if (hours<10) hours = '0'+hours
+  let minute = date.getMinutes()
+  if (minute<10) minute = '0'+minute
+  let second = date.getSeconds()
+  if (second<10) second = '0'+second
+
+  let lol = `CVE_${year}${month}${day}_${hours}${minute}${second}`
+  console.log(lol);
   postGeneralQuery(connection,`INSERT INTO CVE(CVEName, CVETitle, CVEDescription, CVEUserCreate) VALUES("${lol}","${req.body.CVETitle}","${req.body.CVEDescription}","${req.user.Username}")`)
   res.redirect("/CVE/")
+})
+
+
+route.get("/:CVE", async(req,res)=>{
+  let data = await getGeneralQuery(connection,`SELECT * FROM CVE WHERE CVEName="${req.params.CVE}"`)
+  if (data) {
+    res.send(data)
+  }
 })
 
 function checkAuthenticated(req,res,next){

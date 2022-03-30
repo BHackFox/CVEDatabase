@@ -22,6 +22,7 @@ const insertUser = require('./mysql/POST/insertUser');
 const account = require('./routes/account');
 const group = require('./routes/group');
 const cve = require('./routes/cve');
+const user = require('./routes/user')
 
 initializePassport(passport,
   async username => await infoLogin(connection,`SELECT Password,id FROM Users WHERE Username = "${username}"`),
@@ -64,7 +65,6 @@ app.get("/",(req,res)=>{
 })
 
 app.get('/login',checkNotAuthenticated,async(req,res)=>{
-  req.session.redirect = "/"
   res.render('login');
 })
 
@@ -124,6 +124,7 @@ app.use("/account",checkAuthenticated,account);
 
 app.use("/group",checkAuthenticated,group);
 app.use("/CVE",cve);
+app.use("/user",user);
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){
