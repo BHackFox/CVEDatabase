@@ -34,6 +34,10 @@
       </div>
   </head>
   <body>
+    <form class="" action="/CVE/" method="get">
+      <input type="text" name="search" placeholder="Search CVE">
+      <input type="submit" value="Search">
+    </form>
     <table id="table">
       <tr>
         <td>CVE Name</td>
@@ -63,6 +67,7 @@
   <script type="text/javascript">
     const params = new URLSearchParams(window.location.search);
     var val = params.get('row');
+    var search = params.get('search');
     if (val && val>0) {
       var btn = document.createElement("button");
       btn.type = "submit";
@@ -70,17 +75,22 @@
       btn.value = parseInt(val)-20;
       btn.innerText = "<<"+(parseInt(val)-19).toString()+"-"+(parseInt(val)).toString();
       var form = document.getElementById('formrow');
+      if (search) {
+        var input = document.createElement("input");
+        input.setAttribute("type","hidden");
+        input.setAttribute("name","search");
+        input.setAttribute("value",search);
+        form.appendChild(input);
+      }
       form.appendChild(btn);
       <%if(cves.length > 19){%>
         var btn = document.createElement("button");
         btn.type = "submit";
         btn.name = "row";
-        btn.value = parseInt(val)-20;
+        btn.value = parseInt(val)+20;
         btn.innerText = (parseInt(val)+1).toString()+"-"+(parseInt(val)+20).toString()+">>";
         var form = document.getElementById('formrow');
         form.appendChild(btn);
-      // document.getElementById("rowinput").setAttribute('value',parseInt(val)+20);
-      // document.getElementById("rowinput").innerText = (parseInt(val)+1).toString()+"-"+(parseInt(val)+20).toString() + ">>";
       <%}%>
     }
     else {
@@ -91,10 +101,14 @@
         btn.value = 20;
         btn.innerText = "20 >>";
         var form = document.getElementById('formrow');
-        console.log(form);
+        if (search) {
+          var input = document.createElement("input");
+          input.setAttribute("type","hidden");
+          input.setAttribute("name","search");
+          input.setAttribute("value",search);
+          form.appendChild(input);
+        }
         form.appendChild(btn);
-      // document.getElementById("rowinput").setAttribute('value',20);
-      // document.getElementById("rowinput").innerText = "20 >>";
       <%}%>
       var log = 2;
     }

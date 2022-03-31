@@ -16,6 +16,10 @@ route.use(express.static('public'))
 route.get("/",async (req,res)=>{
   req.session.redirect = "/CVE/";
   let n = 0;
+  let search = ""
+  if (req.query.search){
+    search = 'AND CVEName LIKE "%'+req.query.search+'%"'
+  }
   if (req.query.row<=0) {
     res.redirect("/CVE/")
   }
@@ -23,7 +27,8 @@ route.get("/",async (req,res)=>{
     if (req.query.row){
       n = req.query.row;
     }
-    let data = await getGeneralQuery(connection,`SELECT * FROM CVE WHERE (id<=${n+20} AND id>${n}) ORDER BY TimeCreation DESC LIMIT 20`)
+    var query = `SELECT * FROM CVE WHERE (id>(SELECT MAX(id) FROM CVE)-${n+20} AND id<=(SELECT MAX(id) FROM CVE)-${n} ${search}) ORDER BY TimeCreation DESC LIMIT 20`
+    let data = await getGeneralQuery(connection,query)
     let user = false
     if (req.user){
       user = req.user.Username
@@ -47,9 +52,9 @@ route.post("/newcve",checkAuthenticated,async (req,res)=>{
   if (second<10) second = '0'+second
 
   let lol = `CVE_${year}${month}${day}_${hours}${minute}${second}`
-  let cve = getGeneralQuery(connection,`SELECT CVEName FROM CVE WHERE CVEName LIKE "${lol}"`)
-  if (cve[0]){
-    lol = lol + "-"+String(cve[0].slice(-1).parseInt());
+  let number_of_cve = await getGeneralQuery(connection,`SELECT COUNT(CVEName) AS N_CVE FROM CVE WHERE CVEName LIKE "${lol}%"`)
+  if (number_of_cve[0].N_CVE > 0){
+    lol = lol + "-"+String(number_of_cve[0].N_CVE+1);
   }
   postGeneralQuery(connection,`INSERT INTO CVE(CVEName, CVETitle, CVEDescription, CVEUserCreate) VALUES("${lol}","${req.body.CVETitle}","${req.body.CVEDescription}","${req.user.Username}")`)
   res.redirect("/CVE/")
