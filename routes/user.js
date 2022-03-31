@@ -14,25 +14,31 @@ route.use(express.static('public'))
 
 
 route.get("/",async (req,res)=>{
-  let data = await getGeneralQuery(connection,`SELECT * FROM Users`)
+  req.session.redirect = "/user/";
+  var hav = ""
+  if(req.query.search){
+    hav = 'HAVING (Users.Username LIKE "%'+req.query.search+'%")'
+  }
+  let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users,CVE WHERE CVE.CVEUserCreate = Users.Username GROUP BY Users.Username ${hav} ORDER BY NUM DESC`)
   let user = false
+  console.log(data);
   if (req.user){
     user = req.user.Username
   }
-  res.render("cve",{username:user,cves:data})
+  res.render("users",{username:user,users:data})
 })
 
 
 route.get("/:user", async(req,res)=>{
   req.session.redirect = "/user/"+req.params.user
   let data = await getGeneralQuery(connection,`SELECT * FROM Users WHERE Username="${req.params.user}"`)
+  let cves = await getGeneralQuery(connection,`SELECT * FROM CVE WHERE CVEUserCreate="${req.params.user}" ORDER BY TimeCreation DESC`)
   if (data) {
     let user = false;
     if(req.user){
       user = req.user;
     }
-    console.log(user,data);
-    res.render("user",{username:user,dataobj:data[0]})
+    res.render("user",{username:user,dataobj:data[0],cves:cves})
   }
 })
 

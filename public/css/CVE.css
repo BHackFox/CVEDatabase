@@ -5,6 +5,9 @@ body {
 .topnav {
   overflow: hidden;
   background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 .topnav a {
   float: left;
@@ -25,16 +28,7 @@ body {
 .topnav-right {
   float: right;
 }
-.footer {
-  position: relative;
-  left: 0;
-  padding: 40px;
-  bottom: 0px;
 
-  background-color: red;
-  color: white;
-  text-align: center;
-}
 .dropdown {
   float: left;
   overflow: hidden;
@@ -82,14 +76,15 @@ body {
 }
 
 .footer {
- position: fixed;
+ position: relative;
  left: 0;
- width: 100%;
- padding: 40px;
+ width: 97%;
+ padding: 20px;
  bottom: 0px;
- background-color: red;
+ background-color: #333;
  color: white;
  text-align: center;
+ overflow: hidden;
 }
 .row{
  display: flex;

@@ -31,7 +31,7 @@ body {
   padding: 40px;
   bottom: 0px;
 
-  background-color: #333;
+  background-color: red;
   color: white;
   text-align: center;
 }
@@ -79,4 +79,36 @@ body {
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.footer {
+ position: fixed;
+ left: 0;
+ width: 100%;
+ padding: 40px;
+ bottom: 0px;
+ background-color: red;
+ color: white;
+ text-align: center;
+}
+.row{
+ display: flex;
+}
+#cves {
+ font-family: Arial, Helvetica, sans-serif;
+ border-collapse: collapse;
+ width: 100%;
+}
+#cves td, #devices th {
+ border: 1px solid #ddd;
+ padding: 20px;
+}
+#cves tr:nth-child(even){background-color: #f2f2f2;}
+#cves tr:hover {background-color: #ddd;}
+#cves th {
+ padding-top: 12px;
+ padding-bottom: 12px;
+ text-align: left;
+ background-color: #04AA6D;
+ color: white;
 }

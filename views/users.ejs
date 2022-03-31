@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title><%=dataobj.Username%> CVEDatabase</title>
+  <title>CVEDatabase</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
@@ -8,6 +8,9 @@
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
+  </head>
+  <body>
+
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
@@ -31,29 +34,21 @@
           </div>
         <%}%>
       </div>
-  </head>
-  <body>
+    <form class="" action="/user/" method="get">
+      <input type="text" name="search" placeholder="Search User">
+      <input type="submit" value="Search">
+    </form>
     <div class="home">
-      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=dataobj.Username%></u></font></p>
-<p style="margin-bottom: 0in; line-height: 100%"><br/></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<font size="6" style="font-size: 26pt"><%=dataobj.Email%></font></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<br/>
+
 <table id="table">
   <tr>
-    <td>CVE Name</td>
-    <td>CVE Title</td>
-    <td>Description</td>
-    <td>Time</td>
+    <td>Username</td>
+    <td>Number of CVE</td>
   </tr>
-<%for(var i=0; i<cves.length; i++){%>
-  <% var a = new Date(cves[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+<%for(var i=0; i<users.length; i++){%>
 <tr>
-  <td><a href="../CVE/<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></td>
-  <td><%=cves[i].CVETitle%></td>
-  <td><%=cves[i].CVEDescription.substring(0,18)%>...</td>
-  <td><%=time%></td>
+  <td><a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></td>
+  <td><%=users[i].NUM%></td>
 </tr>
 <%}%>
     </div>
