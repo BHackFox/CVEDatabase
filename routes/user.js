@@ -19,7 +19,7 @@ route.get("/",async (req,res)=>{
   if(req.query.search){
     hav = 'HAVING (Users.Username LIKE "%'+req.query.search+'%")'
   }
-  let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users,CVE WHERE CVE.CVEUserCreate = Users.Username GROUP BY Users.Username ${hav} ORDER BY NUM DESC`)
+  let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users,CVE WHERE CVE.CVEUserCreate = Users.Username GROUP BY Users.Username ${hav} ORDER BY NUM DESC LIMIT 25`)
   let user = false
   console.log(data);
   if (req.user){
