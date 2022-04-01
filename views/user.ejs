@@ -12,22 +12,16 @@
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
       <a href="/CVE/">CVEs</a>
-      <% if(!username.Username){ %>
+      <% if(username==false){ %>
         <div class="topnav-right">
           <a href="/login">Login</a>
           <a href="/register">Register</a>
         </div>
         <% }%>
-        <%if(username.Username){ %>
+        <%if(username){ %>
           <div class="topnav-right">
-            <a href="/CVE/">Console</a>
-            <div class="dropdown">
-              <button class="dropbtn">Account</button>
-              <div class="dropdown-content">
-                <a href="/account/"><%=username.Username %></a>
-                <a href="/group/">Group</a>
-              </div>
-            </div>
+            <a href="/group/">Group</a>
+            <a href="/account/"><%=username %></a>
           </div>
         <%}%>
       </div>

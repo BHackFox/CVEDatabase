@@ -16,14 +16,8 @@
         <% }%>
         <%if(username){ %>
           <div class="topnav-right">
-            <a href="/console/">Console</a>
-            <div class="dropdown">
-              <button class="dropbtn">Account</button>
-              <div class="dropdown-content">
-                <a href="/account/"><%=username %></a>
-                <a href="/group/">Group</a>
-              </div>
-            </div>
+            <a href="/group/">Group</a>
+            <a href="/account/"><%=username %></a>
           </div>
         <%}%>
       </div>

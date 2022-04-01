@@ -19,11 +19,17 @@ route.get("/",async (req,res)=>{
   if(req.query.search){
     hav = 'HAVING (Users.Username LIKE "%'+req.query.search+'%")'
   }
-  let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users,CVE WHERE CVE.CVEUserCreate = Users.Username GROUP BY Users.Username ${hav} ORDER BY NUM DESC LIMIT 25`)
+  let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users INNER JOIN CVE ON CVE.CVEUserCreate = Users.Username WHERE Users.Username LIKE "%${req.query.search}%" GROUP BY Users.Username ${hav} ORDER BY NUM DESC LIMIT 25`)
   let user = false
-  console.log(data);
+
+  // let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users,CVE WHERE CVE.CVEUserCreate = Users.Username GROUP BY Users.Username ${hav} ORDER BY NUM DESC LIMIT 25`)
+  // let user = false
+  // if (!data[0]) {
+  //   data = await getGeneralQuery(connection,`SELECT Username FROM Users WHERE Username LIKE "%${req.query.search}%" ORDER BY Username DESC LIMIT 25`)
+  //   data[0].NUM = 0;
+  // }
   if (req.user){
-    user = req.user.Username
+    user = req.user.Email
   }
   res.render("users",{username:user,users:data})
 })
@@ -31,14 +37,17 @@ route.get("/",async (req,res)=>{
 
 route.get("/:user", async(req,res)=>{
   req.session.redirect = "/user/"+req.params.user
-  let data = await getGeneralQuery(connection,`SELECT * FROM Users WHERE Username="${req.params.user}"`)
-  let cves = await getGeneralQuery(connection,`SELECT * FROM CVE WHERE CVEUserCreate="${req.params.user}" ORDER BY TimeCreation DESC`)
+  let data = await getGeneralQuery(connection,`SELECT * FROM CVE,Users WHERE CVEUserCreate="${req.params.user}" AND Username="${req.params.user}" ORDER BY TimeCreation DESC`);
+  let user = false;
+  if(req.user){
+    user = req.user.Email;
+  }
+  console.log(user);
   if (data) {
-    let user = false;
-    if(req.user){
-      user = req.user;
-    }
-    res.render("user",{username:user,dataobj:data[0],cves:cves})
+    res.render("user",{username:user,dataobj:data[0],cves:data})
+  }
+  else {
+    res.redirect("/user/")
   }
 })
 

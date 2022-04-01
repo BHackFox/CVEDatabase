@@ -8,6 +8,8 @@ var connection = mysql.createConnection({
     database: "CVEDatabase",
 });
 const getUser = require('../mysql/GET/getUser');
+const getGeneralQuery = require('../mysql/GET/getGeneralQuery');
+const postGeneralQuery = require('../mysql/POST/postGeneralQuery');
 
 route.get("/",async (req,res)=>{
   let account = await getUser(connection,`SELECT Username,Name,Surname FROM Users WHERE Username = "${req.user.Username}"`);

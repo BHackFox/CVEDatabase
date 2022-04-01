@@ -31,7 +31,7 @@ route.get("/",async (req,res)=>{
     let data = await getGeneralQuery(connection,query)
     let user = false
     if (req.user){
-      user = req.user.Username
+      user = req.user.Email
     }
     res.render("cves",{username:user,cves:data})
   }

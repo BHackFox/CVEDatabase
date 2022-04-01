@@ -8,26 +8,30 @@
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
+  </head>
+  <body>
+
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
       <a href="/CVE/">CVEs</a>
-      <% if(username==false){ %>
-        <div class="topnav-right">
-          <a href="/login">Login</a>
-          <a href="/register">Register</a>
-        </div>
-        <% }%>
-        <%if(username){ %>
-          <div class="topnav-right">
-            <a href="/group/">Group</a>
-            <a href="/account/"><%=username %></a>
-          </div>
-        <%}%>
+      <div class="topnav-right">
+        <a href="/group/">Group</a>
+        <a href="/account/"><%=username %></a>
       </div>
-  </head>
-  <body>
-    <h1></h1>
+      </div>
+    <form class="" action="/user/" method="get">
+      <input type="text" name="search" placeholder="Search User">
+      <input type="submit" value="Search">
+    </form>
+    <div class="home">
+
+<table id="table">
+  <tr>
+    <td>Username</td>
+    <td>Number of CVE</td>
+  </tr>
+    </div>
     <div class="footer">
       <h1>ciao</h1>
     </div>

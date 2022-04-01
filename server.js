@@ -26,7 +26,7 @@ const user = require('./routes/user')
 
 initializePassport(passport,
   async username => await infoLogin(connection,`SELECT Password,id FROM Users WHERE Username = "${username}"`),
-  async id => await infoLogin(connection,`SELECT Username FROM Users WHERE id = "${id}"`)
+  async id => await infoLogin(connection,`SELECT Username,Email FROM Users WHERE id = "${id}"`)
 )
 
 app.use(express.static('public'))
@@ -56,8 +56,9 @@ app.use(methodOverride('_method'))
 
 app.get("/",(req,res)=>{
   req.session.error = "";
+  req.session.redirect = "/";
   if (req.user) {
-    res.render('home',{username:req.user.Username});
+    res.render('home',{username:req.user.Email});
   }
   else {
     res.render('home',{username:false})
