@@ -127,7 +127,7 @@ app.get("/recreate",async (req,res)=>{
 
 app.use("/account",checkAuthenticated,account);
 
-app.use("/group",checkAuthenticated,group);
+app.use("/group",group);
 app.use("/CVE",cve);
 app.use("/user",user);
 

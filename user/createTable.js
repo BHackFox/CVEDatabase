@@ -1,7 +1,6 @@
 
 
 async function run(connection){
-  await dumpTABLES(connection);
   let createTABLES = [
     `CREATE TABLE IF NOT EXISTS Users(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -12,13 +11,36 @@ async function run(connection){
     Surname VARCHAR(30),
     TimeAccount TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
 
-    `CREATE TABLE IF NOT EXISTS Groups(
+    `DROP TABLE IF EXISTS Groups`,
+
+    `CREATE TABLE Groups(
     id INT PRIMARY KEY AUTO_INCREMENT,
     GroupName VARCHAR(30) NOT NULL,
-    GroupDescription TEXT NOT NULL,
-    GroupCreator VARCHAR(30) NOT NULL,
-    GroupMembers INT DEFAULT 1 NOT NULL,
+    GroupDescription TEXT,
     GroupTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
+
+    `DROP TABLE IF EXISTS UserJoinGroup`,
+
+    `CREATE TABLE UserJoinGroup(
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      Username VARCHAR(30) NOT NULL,
+      GroupName VARCHAR(30) NOT NULL,
+      UserRole VARCHAR(30) NOT NULL,
+      UserTimeJoin TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    )`,
+
+    `DROP TABLE IF EXISTS InviteInGroup`,
+
+    `CREATE TABLE InviteInGroup(
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      Username VARCHAR(30) NOT NULL,
+      GroupName VARCHAR(30) NOT NULL,
+      InviteMember VARCHAR(30) NOT NULL,
+      UrlInvite VARCHAR(60) NOT NULL,
+      UserRole VARCHAR(30) NOT NULL,
+      Used BOOLEAN DEFAULT FALSE,
+      UserTimeJoin TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    )`,
 
     `CREATE TABLE IF NOT EXISTS CVE(
     id INT PRIMARY KEY AUTO_INCREMENT,
