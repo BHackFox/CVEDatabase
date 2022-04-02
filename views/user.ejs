@@ -34,6 +34,7 @@
 <font size="6" style="font-size: 26pt"><%=dataobj.Email%></font></p>
 <p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
 <br/>
+<%if(cves[0].CVEName != null){%>
 <table id="table">
   <tr>
     <td>CVE Name</td>
@@ -41,15 +42,16 @@
     <td>Description</td>
     <td>Time</td>
   </tr>
-<%for(var i=0; i<cves.length; i++){%>
-  <% var a = new Date(cves[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
-<tr>
-  <td><a href="../CVE/<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></td>
-  <td><%=cves[i].CVETitle%></td>
-  <td><%=cves[i].CVEDescription.substring(0,18)%>...</td>
-  <td><%=time%></td>
-</tr>
-<%}%>
+    <%for(var i=0; i<cves.length; i++){%>
+      <% var a = new Date(cves[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+      <tr>
+        <td><a href="../CVE/<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></td>
+        <td><%=cves[i].CVETitle%></td>
+        <td><%=cves[i].CVEDescription.substring(0,18)%>...</td>
+        <td><%=time%></td>
+      </tr>
+      <%}%>
+  <%}%>
     </div>
     <div class="footer">
       <h1>ciao</h1>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <link rel="stylesheet" type="text/css" href="css/search.css" />
   </head>
   <body>
 
@@ -27,10 +28,10 @@
             <a href="/account/"><%=username %></a>
           </div>
         <%}%>
-      </div>
-    <form class="" action="/user/" method="get">
-      <input type="text" name="search" placeholder="Search User">
-      <input type="submit" value="Search">
+    </div>
+    <form>
+      <input type="search" name="search" placeholder="Search User"/>
+      <button type="submit">Search</button>
     </form>
     <div class="home">
 
@@ -38,11 +39,13 @@
   <tr>
     <td>Username</td>
     <td>Number of CVE</td>
+    <td>Rank</td>
   </tr>
 <%for(var i=0; i<users.length; i++){%>
 <tr>
   <td><a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></td>
   <td><%=users[i].NUM%></td>
+  <td>#<%=i+1%></td>
 </tr>
 <%}%>
     </div>

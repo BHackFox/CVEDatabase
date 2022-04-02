@@ -1,0 +1,39 @@
+#GeneratedTable {
+  border:1px solid #000000;
+  border-collapse: collapse;
+}
+#GeneratedTable th {
+  font-size: 120%;
+  font-weight: bold;
+  padding: 2px 5px 2px 20px;
+  text-align: left;
+  vertical-align:top;
+  background-color: #999999;
+  color:#ffffff;
+  border-top:1px solid #000000;
+  border-bottom:1px solid #000000
+}
+#GeneratedTable .sub {
+  text-align: center;
+  border-left:1px solid #000000;
+}
+#GeneratedTable td {
+  padding: 5px;
+  font-size: 90%;
+  vertical-align:top;
+  border-bottom:1px solid #e0dbd2
+}
+#GeneratedTable .center {
+  font-size: 180%;
+  color:#880000;
+  text-align: center;
+}
+#GeneratedTable .ltgreybackground {
+  border-left:1px solid #cccccc;
+  background: #eeeeee;
+}
+#GeneratedTable .search {
+  border-top:1px
+  solid #cccccc;
+  background-color:#eeeeee;
+}

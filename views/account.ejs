@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title>CVEDatabase</title>
+  <title>Account <%=data.Username%></title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
@@ -8,29 +8,32 @@
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
-  </head>
-  <body>
-
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
       <a href="/CVE/">CVEs</a>
-      <div class="topnav-right">
-        <a href="/group/">Group</a>
-        <a href="/account/"><%=username %></a>
+      <% if(username==false){ %>
+        <div class="topnav-right">
+          <a href="/login">Login</a>
+          <a href="/register">Register</a>
+        </div>
+        <% }%>
+        <%if(username){ %>
+          <div class="topnav-right">
+            <a href="/group/">Group</a>
+            <a href="/account/"><%=username %></a>
+          </div>
+        <%}%>
       </div>
-      </div>
-    <form class="" action="/user/" method="get">
-      <input type="text" name="search" placeholder="Search User">
-      <input type="submit" value="Search">
-    </form>
+  </head>
+  <body>
     <div class="home">
-
-<table id="table">
-  <tr>
-    <td>Username</td>
-    <td>Number of CVE</td>
-  </tr>
+      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=data.Username%></u></font></p>
+<p style="margin-bottom: 0in; line-height: 100%"><br/></p>
+<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
+<font size="6" style="font-size: 26pt"><%=data.Email%></font></p>
+<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
+<br/>
     </div>
     <div class="footer">
       <h1>ciao</h1>

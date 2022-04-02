@@ -17,11 +17,13 @@ route.get("/",async (req,res)=>{
   req.session.redirect = "/CVE/";
   let n = 0;
   let search = ""
+  let qs = ""
   if (req.query.search){
-    search = 'AND CVEName LIKE "%'+req.query.search+'%"'
+    qs = '?search='+req.query.search
+    search = 'AND (CVEName LIKE "%'+req.query.search+'%" OR CVETitle LIKE "%'+req.query.search+'%")'
   }
   if (req.query.row<=0) {
-    res.redirect("/CVE/")
+    res.redirect("/CVE/"+qs)
   }
   else {
     if (req.query.row){
@@ -65,7 +67,15 @@ route.get("/:CVE", async(req,res)=>{
   req.session.redirect = "/CVE/"+req.params.CVE;
   let data = await getGeneralQuery(connection,`SELECT * FROM CVE WHERE CVEName="${req.params.CVE}"`)
   if (data) {
-    res.send(data)
+    let user = false
+    if (req.user){
+      user = req.user.Email
+    }
+    console.log(data);
+    res.render("cve",{username:user,data:data[0]})
+  }
+  else {
+    res.redirect("/CVE/")
   }
 })
 

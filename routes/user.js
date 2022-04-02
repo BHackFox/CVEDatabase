@@ -19,7 +19,7 @@ route.get("/",async (req,res)=>{
   if(req.query.search){
     hav = 'HAVING (Users.Username LIKE "%'+req.query.search+'%")'
   }
-  let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users INNER JOIN CVE ON CVE.CVEUserCreate = Users.Username WHERE Users.Username LIKE "%${req.query.search}%" GROUP BY Users.Username ${hav} ORDER BY NUM DESC LIMIT 25`)
+  let data = await getGeneralQuery(connection,`SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username ${hav} ORDER BY NUM DESC LIMIT 100`)
   let user = false
 
   // let data = await getGeneralQuery(connection,`SELECT count(*) AS NUM, Username FROM Users,CVE WHERE CVE.CVEUserCreate = Users.Username GROUP BY Users.Username ${hav} ORDER BY NUM DESC LIMIT 25`)
@@ -37,13 +37,13 @@ route.get("/",async (req,res)=>{
 
 route.get("/:user", async(req,res)=>{
   req.session.redirect = "/user/"+req.params.user
-  let data = await getGeneralQuery(connection,`SELECT * FROM CVE,Users WHERE CVEUserCreate="${req.params.user}" AND Username="${req.params.user}" ORDER BY TimeCreation DESC`);
+  let data = await getGeneralQuery(connection,`SELECT * FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate=Users.Username WHERE Username="${req.params.user}" ORDER BY TimeCreation DESC`);
   let user = false;
   if(req.user){
     user = req.user.Email;
   }
-  console.log(user);
-  if (data) {
+  console.log(data.length);
+  if (data[0]) {
     res.render("user",{username:user,dataobj:data[0],cves:data})
   }
   else {

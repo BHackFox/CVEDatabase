@@ -78,8 +78,12 @@ app.post('/login',passport.authenticate('local',{
   failureRedirect: '/login',
   failureFlash: true
 }),(req,res)=>{
-
-  res.redirect(req.session.redirect)
+  if (!req.session.redirect) {
+    res.redirect("/")
+  }
+  else {
+    res.redirect(req.session.redirect)
+  }
 })
 
 app.post("/register",async (req,res)=>{
