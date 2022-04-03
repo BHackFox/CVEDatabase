@@ -37,13 +37,14 @@ route.post("/createGroup",async (req,res)=>{
 route.get("/:group",async(req,res)=>{
   //let users = `SELECT * FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate=Users.Username WHERE Username IN (SELECT * FROM Users,UserJoinGroup WHERE Users.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = "${req.params.group}") ORDER BY TimeCreation DESC`
   let group = await getGeneralQuery(connection,`SELECT * FROM Groups AS t1 WHERE t1.GroupName = "${req.params.group}"`);
-  let users = await getGeneralQuery(connection,`SELECT * FROM Groups,UserJoinGroup,(SELECT Users.Username,CVE.CVEName,CVE.TimeCreation FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Groups.GroupName AND Groups.GroupName = "${req.params.group}"`);
+  let cves = await getGeneralQuery(connection,`SELECT * FROM Groups,UserJoinGroup,(SELECT Users.Username,CVE.CVEName,CVE.TimeCreation FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Groups.GroupName AND Groups.GroupName = "${req.params.group}"`);
+  // let users = await getGeneralQuery(connection,`SELECT U.Username,U.UserTimeJoin,t3.NUM FROM UserJoinGroup AS U, Groups, (SELECT Groups.GroupName,UserJoinGroup.Username, NUM FROM Groups,UserJoinGroup,(SELECT COUNT(Users.Username) AS NUM,Users.Username FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Groups.GroupName AND Groups.GroupName = "${req.params.group}" GROUP BY t1.Username) AS t3 WHERE U.Username = U.Username AND U.GroupName = Groups.GroupName AND Groups.GroupName = "${req.params.group}"`)
   let user = false;
   if (req.user) {
     user = req.user.Email;
   }
-  console.log(users);
-  var data = {username:user,users:users,group:group[0]}
+//  console.log(users);
+  var data = {username:user,users:cves,group:group[0]}
   res.render("group",data);
 })
 
