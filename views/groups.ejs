@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title>Account <%=data.Username%></title>
+  <title>CVEDatabase</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
@@ -8,6 +8,10 @@
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <link rel="stylesheet" type="text/css" href="css/search.css" />
+  </head>
+  <body>
+
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
@@ -25,19 +29,26 @@
             <a href="/account/"><%=username %></a>
           </div>
         <%}%>
-      </div>
-  </head>
-  <body>
+    </div>
+    <form>
+      <input type="search" name="search" placeholder="Search User"/>
+      <button type="submit">Search</button>
+    </form>
     <div class="home">
-      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=data.Username%></u></font></p>
-<p style="margin-bottom: 0in; line-height: 100%"><br/></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<font size="6" style="font-size: 26pt"><%=data.Email%></font></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<br/>
-      <%if(group){%>
-      <a href="/group/<%=group.GroupName%>"><%=group.GroupName%></a>
-      <%}%>
+
+<table id="table">
+  <tr>
+    <td>Username</td>
+    <td>Number of CVE</td>
+    <td>Rank</td>
+  </tr>
+<%for(var i=0; i<groups.length; i++){%>
+<tr>
+  <td><a href="/group/<%=groups[i].GroupName%>"><%=groups[i].GroupName%></a></td>
+  <td><%=groups[i].Sum_Users%></td>
+  <td>#<%=i+1%></td>
+</tr>
+<%}%>
     </div>
     <div class="footer">
       <h1>ciao</h1>
