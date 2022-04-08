@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title>Account <%=data.Username%></title>
+  <title>Group <%=group.GroupName%></title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
@@ -12,6 +12,7 @@
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
       <a href="/CVE/">CVEs</a>
+      <a href="/group/">Groups</a>
       <% if(username==false){ %>
         <div class="topnav-right">
           <a href="/login">Login</a>
@@ -28,10 +29,10 @@
   </head>
   <body>
     <div class="home">
-      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=data.GroupName%></u></font></p>
+      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=group.GroupName%></u></font></p>
 <p style="margin-bottom: 0in; line-height: 100%"><br/></p>
 <p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<font size="6" style="font-size: 26pt"><%=data.GroupDescription%></font></p>
+<font size="6" style="font-size: 26pt"><%=group.GroupDescription%></font></p>
 <p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
 <br/>
 <table id="table">
@@ -41,7 +42,7 @@
     <td>Time</td>
   </tr>
     <%for(var i=0; i<users.length; i++){%>
-      <% var a = new Date(users[i].UserTimeJoin);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+      <% var a = new Date(users[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
       <tr>
         <td><a href="../user/<%=users[i].Username%>"><%=users[i].Username%></a></td>
         <td><%=users[i].UserRole%></td>
