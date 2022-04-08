@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title>CVEDatabase</title>
+  <title>Join <%=data.GroupName%>, CVEDatabase</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
@@ -8,10 +8,6 @@
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
-    <link rel="stylesheet" type="text/css" href="css/search.css" />
-  </head>
-  <body>
-
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
@@ -29,27 +25,24 @@
             <a href="/account/"><%=username %></a>
           </div>
         <%}%>
-    </div>
-    <form>
-      <input type="search" name="search" placeholder="Search User"/>
-      <button type="submit">Search</button>
-    </form>
-    <div class="home">
-
-<table id="table">
-  <tr>
-    <td>Username</td>
-    <td>Number of CVE</td>
-    <td>Number of Users</td>
-  </tr>
-<%for(var i=0; i<groups.length; i++){%>
-<tr>
-  <td><a href="/group/<%=groups[i].GroupName%>"><%=groups[i].GroupName%></a></td>
-  <td><%=groups[i].Sum_Users%></td>
-  <td><%=groups[i].N_Users%></td>
-</tr>
-<%}%>
-    </div>
+      </div>
+  </head>
+  <body>
+    <h1>Join <%=data.GroupName%>!</h1>
+    <h2><%=data.InviteMember%> wants you to join his group: <%=data.GroupName%></h2>
+    <%if(join){%>
+      <div class="login-form">
+        <form action="/group/groupJoin" method="POST">
+  				<input type="hidden" name="username" value="<%=data.Username%>">
+          <input type="hidden" name="GroupName" value="<%=data.GroupName%>">
+          <input type="hidden" name="UserRole" value="<%=data.UserRole%>">
+  				<input type="hidden" name="UrlInvite" value="<%=data.UrlInvite%>">
+  				<input type="submit" value="JOIN!">
+  			</form>
+    <%}%>
+    <%if(join==false){%>
+      <h1>You can't access here! Try to log in</h1>
+    <%}%>
     <div class="footer">
       <h1>ciao</h1>
     </div>

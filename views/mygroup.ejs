@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <title><%=data.GroupName%> CVEDatabase</title>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
+    <link rel="stylesheet" type="text/css" href="css/footer.css" />
+    <link rel="stylesheet" type="text/css" href="css/table.css" />
+    <link rel="stylesheet" type="text/css" href="css/topnav.css" />
+    <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="/user/">Users</a>
+      <a href="/CVE/">CVEs</a>
+      <a href="/group/">Groups</a>
+      <% if(username==false){ %>
+        <div class="topnav-right">
+          <a href="/login">Login</a>
+          <a href="/register">Register</a>
+        </div>
+        <% }%>
+        <%if(username){ %>
+          <div class="topnav-right">
+            <a href="/account/group">Group</a>
+            <a href="/account/"><%=username.Email %></a>
+          </div>
+        <%}%>
+      </div>
+  </head>
+  <body>
+    <div id="GeneratedTable">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+		<th colspan="2">Group-Name</th>
+	</tr>
+	<tr>
+		<td nowrap="nowrap" align="center" valign="top">
+			<h2><%=data.GroupName%></h2>
+		</td>
+		<td valign="top" class="ltgreybackground">
+			<div class="larger"><a href="/group/<%data.GroupName%>" target="_blank">About <%=data.GroupName%> Group</a></div>
+		</td>
+	</tr>
+  <tr>
+    <th nowrap="nowrap" align="center" valign="top">Description</th>
+    <th valign="top" class="sub">Number Of Members</th>
+		<th valign="top" class="sub">Number Of CVE</th>
+	</tr>
+	<tr>
+		<td nowrap="nowrap" align="center" valign="top">
+      <div class="smaller">&bull; <%=data.GroupDescription%></div>
+    </td>
+    <td valign="top" class="ltgreybackground">
+			<div class="center">&bull; <%=data.N_Users%></div>
+		</td><td valign="top" class="ltgreybackground">
+			<div class="center">&bull; <%=data.Sum_Users%></div>
+		</td>
+	</tr>
+  <tr>
+    <th nowrap="nowrap" align="center" valign="top">Users</th>
+		<th valign="top" class="sub">Role</th>
+	</tr>
+  <td nowrap="nowrap" align="left" valign="top">
+  <%for (var i = 0; i < users.length; i++) {%>
+    <div class="center">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+  <%}%>
+  </td>
+  <td valign="top" class="ltgreybackground">
+    <%for (var i = 0; i < users.length; i++) {%>
+      <div class="center">&bull; <%=users[i].UserRole%></div>
+    <%}%>
+	</td>
+  <tr>
+    <th nowrap="nowrap" align="center" valign="top">Last CVE Created</th>
+    <th valign="top" class="sub">CVE Name</th>
+  </tr>
+  <td nowrap="nowrap" align="left" valign="top">
+    <%for (var i = 0; i < users.length; i++) {%>
+      <div class="center">&bull; <a href="/user/<%=cves[i].Username%>"><%=cves[i].Username%></a></div>
+      <%}%>
+    </td>
+    <td valign="top" class="ltgreybackground">
+      <%for (var i = 0; i < cves.length; i++) {%>
+        <div class="center">&bull; <a href="/CVE/<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></div>
+        <%}%>
+      </td>
+	<tr>
+		<th colspan="2">Add New Member</th>
+	</tr>
+  <td nowrap="nowrap" align="center" valign="top">
+    <form class="" action="/group/invite" method="post">
+      <input type="text" name="username" placeholder="Username...">
+      <input type="text" name="UserRole" placeholder="User Role">
+      <input type="hidden" name="GroupName" value="<%=data.GroupName%>">
+      <input type="hidden" name="InviteMember" value="<%=username.Username%>">
+      <input type="submit" value="Send">
+    </form>
+  </td>
+    </div>
+    <div class="footer">
+      <h1>ciao</h1>
+    </div>
+  </body>
+</html>

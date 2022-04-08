@@ -23,10 +23,19 @@ route.get("/",async (req,res)=>{
 })
 
 route.get("/group",async(req,res)=>{
+<<<<<<< HEAD
   let user = req.user.Email;
   let group = await getGeneralQuery(connection,`SELECT * FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.Username = "${req.user.Username}"`);
   let users = await getGeneralQuery(connection,`SELECT * FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.GroupName = "${group[0].GroupName}"`);
   res.render("group",{username:user,data:group[0],users:users})
+=======
+  let user = req.user;
+  let group = await getGeneralQuery(connection,`SELECT SUM(NUM) AS Sum_Users,t1.GroupName,t1.GroupDescription, COUNT(t1.Username) AS N_Users FROM (SELECT Groups.GroupName,Username,Groups.GroupDescription FROM Groups,UserJoinGroup WHERE Groups.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName,t1.GroupDescription HAVING (t1.GroupName = (SELECT UserJoinGroup.GroupName FROM UserJoinGroup WHERE UserJoinGroup.Username="${req.user.Username}"))`);
+  console.log(user);
+  let users = await getGeneralQuery(connection,`SELECT * FROM Groups,UserJoinGroup WHERE Groups.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.GroupName = "${group[0].GroupName}"`);
+  let cves = await getGeneralQuery(connection,`SELECT * FROM Groups,UserJoinGroup,(SELECT Users.Username,CVE.CVEName,CVE.TimeCreation FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Groups.GroupName AND Groups.GroupName = "${group[0].GroupName}"`)
+  res.render("mygroup",{username:user,data:group[0],users:users,cves:cves})
+>>>>>>> a80cd65a78ea09b6a3ac5d11b6c81cf4344c1153
 })
 
 

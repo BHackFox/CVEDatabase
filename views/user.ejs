@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/footer.css" />
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
+    <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <div class="topnav">
       <a class="active" href="/">Home</a>
@@ -29,12 +30,37 @@
   </head>
   <body>
     <div class="home">
-      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=dataobj.Username%></u></font></p>
-<p style="margin-bottom: 0in; line-height: 100%"><br/></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<font size="6" style="font-size: 26pt"><%=dataobj.Email%></font></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<br/>
+      <div id="GeneratedTable">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+      <th colspan="2">Username</th>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" align="center" valign="top">
+        <h2><%=dataobj.Username%></h2>
+      </td>
+      <td valign="top" class="ltgreybackground">
+        <div class="larger"><a href="https://github.com/bhackfox/CVEDatabase" target="_blank">About User <%=dataobj.Username%></a></div>
+      </td>
+    </tr>
+    <tr>
+      <th nowrap="nowrap" align="center" valign="top">Name</th>
+      <th valign="top" class="sub">Surname</th>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" align="center" valign="top">
+        <div class="smaller"><%= dataobj.Name ? dataobj.Name : "..."%></div>
+      </td>
+      <td valign="top" class="ltgreybackground">
+        <div class="smaller"><%= dataobj.Surname ? dataobj.Surname : "..."%></div>
+      </td>
+    </tr>
+    <tr>
+      <th nowrap="nowrap" align="center" valign="top">Group</th>
+    </tr>
+    <td nowrap="nowrap" align="center" valign="top">
+      <div class="center"><a href="/group/<%= group ? group.GroupName : ""%>"><%= group ? group.GroupName : "..."%></a></div>
+    </td>
 <%if(cves[0].CVEName != null){%>
 <table id="table">
   <tr>
