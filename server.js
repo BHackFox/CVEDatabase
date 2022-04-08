@@ -23,6 +23,7 @@ const account = require('./routes/account');
 const group = require('./routes/group');
 const cve = require('./routes/cve');
 const user = require('./routes/user')
+const getGeneralQuery = require('./mysql/GET/getGeneralQuery');
 
 initializePassport(passport,
   async username => await infoLogin(connection,`SELECT Password,id FROM Users WHERE Username = "${username}"`),
@@ -54,14 +55,39 @@ app.use(passport.session())
 app.use(methodOverride('_method'))
 
 
-app.get("/",(req,res)=>{
+app.get("/",async (req,res)=>{
   req.session.error = "";
+
   req.session.redirect = "/";
-  if (req.user) {
-    res.render('home',{username:req.user.Email});
+  if (req.query.join) {
+    console.log("si");
+    let url = await getGeneralQuery(connection,`SELECT * from InviteInGroup WHERE UrlInvite="${req.query.join}"`);
+    console.log(url);
+    if(url[0]){
+      req.session.redirect = "/?join="+req.query.join;
+      if (req.user && req.user.Username == url[0].Username) {
+        console.log("h1");
+        res.render('join',{username:req.user.Email,join:true,data:url[0]});
+      }
+      else {
+        let user = false;
+        if (req.user) {
+          user = req.user.Email
+        }
+        res.render('join',{username:user,join:false,data:url[0]});
+      }
+    }
+    else {
+      res.redirect("/")
+    }
   }
   else {
-    res.render('home',{username:false})
+    if (req.user) {
+      res.render('home',{username:req.user.Email});
+    }
+    else {
+      res.render('home',{username:false})
+    }
   }
 })
 
@@ -79,7 +105,7 @@ app.post('/login',passport.authenticate('local',{
   failureFlash: true
 }),(req,res)=>{
   if (!req.session.redirect) {
-    res.redirect("/")
+    res.redirect("/account")
   }
   else {
     res.redirect(req.session.redirect)

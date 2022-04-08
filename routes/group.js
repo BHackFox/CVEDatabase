@@ -23,7 +23,7 @@ route.get("/",async (req,res)=>{
   if (req.user) {
     user = req.user.Email;
   }
-  let groups = await getGeneralQuery(connection,`SELECT SUM(NUM) AS Sum_Users,t1.GroupName FROM (SELECT Groups.GroupName,Username FROM Groups,UserJoinGroup WHERE Groups.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName ${hav} ORDER BY Sum_Users DESC LIMIT 25`)
+  let groups = await getGeneralQuery(connection,`SELECT SUM(NUM) AS Sum_Users,t1.GroupName,COUNT(t1.Username) AS N_Users FROM (SELECT Groups.GroupName,Username FROM Groups,UserJoinGroup WHERE Groups.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName ${hav} ORDER BY Sum_Users DESC LIMIT 25`)
   res.render("groups",{username:user,groups:groups});
 })
 
@@ -36,14 +36,27 @@ route.post("/createGroup",async (req,res)=>{
   res.redirect("/group")
 })
 
-route.post("/inviteMember",async(req,res)=>{
+route.post("/groupJoin",async(req,res)=>{
   let data = {
     Username:req.body.username,
     GroupName:req.body.GroupName,
-    InviteMember:req.body.InviteMember,
+    UserRole: req.body.UserRole
+  };
+  await postGeneralQuery(connection,`INSERT INTO UserJoinGroup(Username,GroupName,UserRole) VALUES("${data.Username}","${data.GroupName}","${data.UserRole}")`);
+  await postGeneralQuery(connection,`UPDATE InviteInGroup SET Used=1 WHERE UrlInvite="${req.body.UrlInvite}"`);
+  res.redirect(req.session.redirect)
+})
+
+
+route.post("/invite",async(req,res)=>{
+  let data = {
+    Username:req.body.username,
+    GroupName:req.body.GroupName,
+    InviteMember:req.user.Username,
     UrlInvite: tokenCreate(20),
     UserRole: req.body.UserRole
   };
+  console.log(data);
   await postGeneralQuery(connection,`INSERT INTO UserJoinGroup(Username,GroupName,InviteMember,UrlInvite,UserRole) VALUES("${data.Username}","${data.GroupName}","${data.InviteMember}","${data.UrlInvite}","${data.UserRole}")`);
   res.redirect("/account")
 })

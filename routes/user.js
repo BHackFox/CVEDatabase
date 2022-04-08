@@ -38,13 +38,15 @@ route.get("/",async (req,res)=>{
 route.get("/:user", async(req,res)=>{
   req.session.redirect = "/user/"+req.params.user
   let data = await getGeneralQuery(connection,`SELECT * FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate=Users.Username WHERE Username="${req.params.user}" ORDER BY TimeCreation DESC`);
+  let group = await getGeneralQuery(connection,`SELECT UserJoinGroup.GroupName FROM UserJoinGroup WHERE UserJoinGroup.Username="${req.params.user}"`)
+  console.log(group);
   let user = false;
   if(req.user){
     user = req.user.Email;
   }
   console.log(data.length);
   if (data[0]) {
-    res.render("user",{username:user,dataobj:data[0],cves:data})
+    res.render("user",{username:user,dataobj:data[0],cves:data,group:group[0]})
   }
   else {
     res.redirect("/user/")
