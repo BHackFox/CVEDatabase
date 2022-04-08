@@ -11,17 +11,15 @@ async function run(connection){
     Surname VARCHAR(30),
     TimeAccount TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
 
-    `DROP TABLE IF EXISTS Groups`,
 
-    `CREATE TABLE Groups(
+    `CREATE TABLE IF NOT EXISTS Grps(
     id INT PRIMARY KEY AUTO_INCREMENT,
     GroupName VARCHAR(30) NOT NULL,
     GroupDescription TEXT,
     GroupTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
 
-    `DROP TABLE IF EXISTS UserJoinGroup`,
 
-    `CREATE TABLE UserJoinGroup(
+    `CREATE TABLE IF NOT EXISTS UserJoinGroup(
       id INT PRIMARY KEY AUTO_INCREMENT,
       Username VARCHAR(30) NOT NULL,
       GroupName VARCHAR(30) NOT NULL,
@@ -29,9 +27,8 @@ async function run(connection){
       UserTimeJoin TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     )`,
 
-    `DROP TABLE IF EXISTS InviteInGroup`,
 
-    `CREATE TABLE InviteInGroup(
+    `CREATE TABLE IF NOT EXISTS InviteInGroup(
       id INT PRIMARY KEY AUTO_INCREMENT,
       Username VARCHAR(30) NOT NULL,
       GroupName VARCHAR(30) NOT NULL,
@@ -68,7 +65,7 @@ async function run(connection){
 
 function dumpTABLES(connection) {
   return new Promise((resolve, reject) =>{
-    connection.query(`DROP TABLE IF EXISTS Users, CVE, Groups`,function(err,results,fields){
+    connection.query(`DROP TABLE IF EXISTS Users, CVE, Grps`,function(err,results,fields){
       if (err) {
         throw err;
       }

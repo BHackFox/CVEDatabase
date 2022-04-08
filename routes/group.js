@@ -21,24 +21,24 @@ route.get("/",async (req,res)=>{
   if (req.user) {
     user = req.user.Email;
   }
-  let groups = await getGeneralQuery(connection,`SELECT SUM(NUM) AS Sum_Users,t1.GroupName FROM (SELECT Groups.GroupName,Username FROM Groups,UserJoinGroup WHERE Groups.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName ${hav} ORDER BY Sum_Users DESC LIMIT 25`)
+  let groups = await getGeneralQuery(connection,`SELECT SUM(NUM) AS Sum_Users,t1.GroupName FROM (SELECT Grps.GroupName,Username FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName ${hav} ORDER BY Sum_Users DESC LIMIT 25`)
   res.render("groups",{username:user,groups:groups});
 })
 
 route.post("/createGroup",async (req,res)=>{
-  let group = await getGeneralQuery(connection,`SELECT * FROM Groups,UserJoinGroup WHERE Groups.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.Username = "${req.user.Username}"`)
+  let group = await getGeneralQuery(connection,`SELECT * FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.Username = "${req.user.Username}"`)
   if (!group[0]) {
     await postGeneralQuery(connection,`INSERT INTO UserJoinGroup(Username,GroupName,UserRole) VALUES("${req.user.Username}","${req.body.GroupName}","CREATOR")`)
-    await postGeneralQuery(connection,`INSERT INTO Groups(GroupName,GroupDescription) VALUES("${req.body.GroupName}","A new Group was created!")`)
+    await postGeneralQuery(connection,`INSERT INTO Grps(GroupName,GroupDescription) VALUES("${req.body.GroupName}","A new Group was created!")`)
   }
   res.redirect("/group")
 })
 
 route.get("/:group",async(req,res)=>{
   //let users = `SELECT * FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate=Users.Username WHERE Username IN (SELECT * FROM Users,UserJoinGroup WHERE Users.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = "${req.params.group}") ORDER BY TimeCreation DESC`
-  let group = await getGeneralQuery(connection,`SELECT * FROM Groups AS t1 WHERE t1.GroupName = "${req.params.group}"`);
-  let cves = await getGeneralQuery(connection,`SELECT * FROM Groups,UserJoinGroup,(SELECT Users.Username,CVE.CVEName,CVE.TimeCreation FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Groups.GroupName AND Groups.GroupName = "${req.params.group}"`);
-  // let users = await getGeneralQuery(connection,`SELECT U.Username,U.UserTimeJoin,t3.NUM FROM UserJoinGroup AS U, Groups, (SELECT Groups.GroupName,UserJoinGroup.Username, NUM FROM Groups,UserJoinGroup,(SELECT COUNT(Users.Username) AS NUM,Users.Username FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Groups.GroupName AND Groups.GroupName = "${req.params.group}" GROUP BY t1.Username) AS t3 WHERE U.Username = U.Username AND U.GroupName = Groups.GroupName AND Groups.GroupName = "${req.params.group}"`)
+  let group = await getGeneralQuery(connection,`SELECT * FROM Grps AS t1 WHERE t1.GroupName = "${req.params.group}"`);
+  let cves = await getGeneralQuery(connection,`SELECT * FROM Grps,UserJoinGroup,(SELECT Users.Username,CVE.CVEName,CVE.TimeCreation FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Grps.GroupName AND Grps.GroupName = "${req.params.group}"`);
+  // let users = await getGeneralQuery(connection,`SELECT U.Username,U.UserTimeJoin,t3.NUM FROM UserJoinGroup AS U, Grps, (SELECT Grps.GroupName,UserJoinGroup.Username, NUM FROM Grps,UserJoinGroup,(SELECT COUNT(Users.Username) AS NUM,Users.Username FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Grps.GroupName AND Grps.GroupName = "${req.params.group}" GROUP BY t1.Username) AS t3 WHERE U.Username = U.Username AND U.GroupName = Grps.GroupName AND Grps.GroupName = "${req.params.group}"`)
   let user = false;
   if (req.user) {
     user = req.user.Email;
