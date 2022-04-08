@@ -1,6 +1,8 @@
 const express = require('express')
 const route = express.Router()
 const mysql = require('mysql');
+var crypto = require('crypto');
+var base64url = require('base64url');
 var connection = mysql.createConnection({
     host: "localhost",
     user: "fede",
@@ -23,6 +25,18 @@ route.post("/createGroup",async (req,res)=>{
   res.redirect("/group")
 })
 
+route.post("/inviteMember",async(req,res)=>{
+  let data = {
+    Username:req.body.username,
+    GroupName:req.body.GroupName,
+    InviteMember:req.body.InviteMember,
+    UrlInvite: tokenCreate(20),
+    UserRole: req.body.UserRole
+  };
+  await postGeneralQuery(connection,`INSERT INTO UserJoinGroup(Username,GroupName,InviteMember,UrlInvite,UserRole) VALUES("${data.Username}","${data.GroupName}","${data.InviteMember}","${data.UrlInvite}","${data.UserRole}")`);
+  res.redirect("/account")
+})
+
 route.get("/:group",async(req,res)=>{
   let group = await getGeneralQuery(connection,`SELECT * FROM Groups WHERE GroupName = "${req.params.group}"`);
   let users = await getGeneralQuery(connection,`SELECT * FROM Users,UserJoinGroup WHERE Users.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = "${req.params.group}"`);
@@ -34,5 +48,8 @@ route.get("/:group",async(req,res)=>{
   res.send(data);
 })
 
+function tokenCreate(n){
+  return base64url(crypto.randomBytes(n));
+}
 
 module.exports = route;
