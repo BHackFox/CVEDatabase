@@ -67,7 +67,7 @@ app.get("/",async (req,res)=>{
       req.session.redirect = "/?join="+req.query.join;
       if (req.user && req.user.Username == url[0].Username) {
         console.log("h1");
-        res.render('join',{username:req.user.Email,join:true,data:url[0]});
+        res.render('join',{username:req.user,join:true,data:url[0]});
       }
       else {
         let user = false;
@@ -147,7 +147,7 @@ app.get("/recreate",async (req,res)=>{
     res.send("NO")
   } finally {
     console.log("Fatto");
-    res.send("Ok")
+    res.redirect("/");
   }
 })
 

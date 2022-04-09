@@ -1,6 +1,7 @@
 
 
 async function run(connection){
+  await dumpTABLES(connection);
   let createTABLES = [
     `CREATE TABLE IF NOT EXISTS Users(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -65,7 +66,7 @@ async function run(connection){
 
 function dumpTABLES(connection) {
   return new Promise((resolve, reject) =>{
-    connection.query(`DROP TABLE IF EXISTS Users, CVE, Grps`,function(err,results,fields){
+    connection.query(`DROP TABLE Users, CVE, Grps,InviteInGroup,UserJoinGroup`,function(err,results,fields){
       if (err) {
         throw err;
       }
