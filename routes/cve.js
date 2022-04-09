@@ -33,7 +33,7 @@ route.get("/",async (req,res)=>{
     let data = await getGeneralQuery(connection,query)
     let user = false
     if (req.user){
-      user = req.user.Email
+      user = req.user;
     }
     res.render("cves",{username:user,cves:data})
   }
@@ -69,7 +69,7 @@ route.get("/:CVE", async(req,res)=>{
   if (data) {
     let user = false
     if (req.user){
-      user = req.user.Email
+      user = req.user;
     }
     console.log(data);
     res.render("cve",{username:user,data:data[0]})
@@ -83,7 +83,6 @@ function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){
     return next()
   }
-  console.log("AO");
   res.redirect('/login')
 }
 

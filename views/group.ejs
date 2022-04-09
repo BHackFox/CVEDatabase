@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title>Group <%=group.GroupName%></title>
+  <title><%=data.GroupName%> CVEDatabase</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
@@ -8,6 +8,9 @@
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
+  </head>
+  <body>
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
@@ -21,34 +24,81 @@
         <% }%>
         <%if(username){ %>
           <div class="topnav-right">
-            <a href="/group/">Group</a>
-            <a href="/account/"><%=username %></a>
+            <a href="/account/group">Group</a>
+            <a href="/account/"><%=username.Email %></a>
           </div>
-        <%}%>
-      </div>
-  </head>
-  <body>
-    <div class="home">
-      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=group.GroupName%></u></font></p>
-<p style="margin-bottom: 0in; line-height: 100%"><br/></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<font size="6" style="font-size: 26pt"><%=group.GroupDescription%></font></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<br/>
-<table id="table">
+          <%}%>
+        </div>
+    <div id="GeneratedTable">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+		<th colspan="1">Group-Name</th>
+	</tr>
+	<tr>
+		<td nowrap="nowrap" align="center" valign="top">
+			<h2><%=data.GroupName%></h2>
+		</td>
+		<td valign="top" class="ltgreybackground">
+			<div class="larger"><a href="/group/<%data.GroupName%>" target="_blank">About <%=data.GroupName%> Group</a></div>
+		</td>
+	</tr>
   <tr>
-    <td>Username</td>
-    <td>UserRole</td>
-    <td>Time</td>
+    <th nowrap="nowrap" align="center" valign="top">Description</th>
+    <th valign="top" class="sub">Number Of Members</th>
+		<th valign="top" class="sub">Number Of CVE</th>
+	</tr>
+	<tr>
+		<td nowrap="nowrap" align="center" valign="top">
+      <div class="smaller">&bull; <%=data.GroupDescription%></div>
+    </td>
+    <td valign="top" class="ltgreybackground">
+			<div class="center">&bull; <%=data.N_Users%></div>
+		</td><td valign="top" class="ltgreybackground">
+			<div class="center">&bull; <%=data.Sum_Users%></div>
+		</td>
+	</tr>
+  <tr>
+    <th nowrap="nowrap" align="center" valign="top">Users</th>
+    <th valign="top" class="sub">Role</th>
+		<th valign="top" class="sub">CVE Created</th>
+	</tr>
+  <td nowrap="nowrap" align="left" valign="top">
+  <%for (var i = 0; i < users.length; i++) {%>
+    <div class="center">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+  <%}%>
+  </td>
+  <td nowrap="nowrap" align="left" valign="top">
+    <%for (var i = 0; i < users.length; i++) {%>
+      <div class="center">&bull; <%=users[i].UserRole%></div>
+    <%}%>
+	</td>
+  <td valign="top" class="ltgreybackground">
+  <%for (var i = 0; i < users.length; i++) {%>
+    <div class="center">&bull; <%=users[i].NUM%></div>
+  <%}%>
+  </td>
+  <tr>
+    <th nowrap="nowrap" align="center" valign="top">Last CVE Created</th>
+    <th valign="top" class="sub">CVE Name</th>
+    <th valign="top" class="sub">CVE Time</th>
   </tr>
-    <%for(var i=0; i<users.length; i++){%>
-      <% var a = new Date(users[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
-      <tr>
-        <td><a href="../user/<%=users[i].Username%>"><%=users[i].Username%></a></td>
-        <td><%=users[i].UserRole%></td>
-        <td><%=time%></td>
-      </tr>
+  <td valign="top" class="ltgreybackground">
+    <%for (var i = 0; i < cves.length; i++) {%>
+      <div class="center">&bull; <a href="/user/<%=cves[i].Username%>"><%=cves[i].Username%></a></div>
       <%}%>
+    </td>
+    <td valign="top" class="ltgreybackground">
+      <%for (var i = 0; i < cves.length; i++) {%>
+        <div class="center">&bull; <a href="/CVE/<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></div>
+      <%}%>
+    </td>
+      <td valign="top" class="ltgreybackground">
+        <%for (var i = 0; i < cves.length; i++) {%>
+          <% var a = new Date(cves[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+          <div class="center">&bull; <%=time%></div>
+          <%}%>
+        </td>
+
     </div>
     <div class="footer">
       <h1>ciao</h1>

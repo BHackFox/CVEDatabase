@@ -1,43 +1,84 @@
 <!DOCTYPE html>
 <html>
-  <title>Account <%=data.Username%></title>
+  <title><%=data.Username%> CVEDatabase</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
     <link rel="stylesheet" type="text/css" href="css/footer.css" />
     <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
+    <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
+  </head>
+  <body>
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
       <a href="/CVE/">CVEs</a>
       <a href="/group/">Groups</a>
       <% if(username==false){ %>
-        <div class="topnav-right">
-          <a href="/login">Login</a>
-          <a href="/register">Register</a>
-        </div>
-        <% }%>
-        <%if(username){ %>
-          <div class="topnav-right">
-            <a href="/group/">Group</a>
-            <a href="/account/"><%=username %></a>
-          </div>
-        <%}%>
+      <div class="topnav-right">
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
       </div>
-  </head>
-  <body>
-    <div class="home">
-      <p style="margin-bottom: 0in; line-height: 100%"><font size="7" style="font-size: 40pt"><u><%=data.Username%></u></font></p>
-<p style="margin-bottom: 0in; line-height: 100%"><br/></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<font size="6" style="font-size: 26pt"><%=data.Email%></font></p>
-<p align="right" style="margin-bottom: 0in; line-height: 100%; text-decoration: none">
-<br/>
-      <%if(group){%>
-      <a href="/account/group"><%=group.GroupName%></a>
+      <% }%>
+      <%if(username){ %>
+      <div class="topnav-right">
+        <a href="/account/group">Group</a>
+        <a href="/account/"><%=username.Email %></a>
+      </div>
       <%}%>
+    </div>
+    <div class="home">
+      <div id="GeneratedTable">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+      <th colspan="2">Username</th>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" align="center" valign="top">
+        <h2><%=data.Username%></h2>
+      </td>
+      <td valign="top" class="ltgreybackground">
+        <div class="larger"><a href="https://github.com/bhackfox/CVEDatabase" target="_blank">About User <%=data.Username%></a></div>
+      </td>
+    </tr>
+    <tr>
+      <th nowrap="nowrap" align="center" valign="top">Name</th>
+      <th valign="top" class="sub">Surname</th>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" align="center" valign="top">
+        <div class="smaller"><%= data.Name ? data.Name : "..."%></div>
+      </td>
+      <td valign="top" class="ltgreybackground">
+        <div class="smaller"><%= data.Surname ? data.Surname : "..."%></div>
+      </td>
+    </tr>
+    <tr>
+      <th nowrap="nowrap" align="center" valign="top">Group</th>
+    </tr>
+    <td nowrap="nowrap" align="center" valign="top">
+      <div class="center"><a href="/group/<%= group ? group.GroupName : ""%>"><%= group ? group.GroupName : "..."%></a></div>
+    </td>
+<%if(cves[0].CVEName != null){%>
+<table id="table">
+  <tr>
+    <td>CVE Name</td>
+    <td>CVE Title</td>
+    <td>Description</td>
+    <td>Time</td>
+  </tr>
+    <%for(var i=0; i<cves.length; i++){%>
+      <% var a = new Date(cves[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+      <tr>
+        <td><a href="../CVE/<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></td>
+        <td><%=cves[i].CVETitle%></td>
+        <td><%=cves[i].CVEDescription.substring(0,18)%>...</td>
+        <td><%=time%></td>
+      </tr>
+      <%}%>
+  <%}%>
     </div>
     <div class="footer">
       <h1>ciao</h1>

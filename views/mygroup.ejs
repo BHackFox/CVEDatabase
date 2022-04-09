@@ -9,30 +9,22 @@
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
-    <div class="topnav">
-      <a class="active" href="/">Home</a>
-      <a href="/user/">Users</a>
-      <a href="/CVE/">CVEs</a>
-      <a href="/group/">Groups</a>
-      <% if(username==false){ %>
-        <div class="topnav-right">
-          <a href="/login">Login</a>
-          <a href="/register">Register</a>
-        </div>
-        <% }%>
-        <%if(username){ %>
-          <div class="topnav-right">
-            <a href="/account/group">Group</a>
-            <a href="/account/"><%=username.Email %></a>
-          </div>
-        <%}%>
-      </div>
   </head>
+  <div class="topnav">
+    <a class="active" href="/">Home</a>
+    <a href="/user/">Users</a>
+    <a href="/CVE/">CVEs</a>
+    <a href="/group/">Groups</a>
+    <div class="topnav-right">
+      <a href="/account/group">Group</a>
+      <a href="/account/"><%=username.Email %></a>
+    </div>
+  </div>
   <body>
     <div id="GeneratedTable">
       <table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr>
-		<th colspan="2">Group-Name</th>
+		<th colspan="1">Group-Name</th>
 	</tr>
 	<tr>
 		<td nowrap="nowrap" align="center" valign="top">
@@ -59,34 +51,52 @@
 	</tr>
   <tr>
     <th nowrap="nowrap" align="center" valign="top">Users</th>
-		<th valign="top" class="sub">Role</th>
+    <th valign="top" class="sub">Role</th>
+		<th valign="top" class="sub">CVE Created</th>
 	</tr>
   <td nowrap="nowrap" align="left" valign="top">
   <%for (var i = 0; i < users.length; i++) {%>
+    <% var a = new Date(users[i].UserTimeJoin);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+    <!-- <div class="row" align="center">
+     <div class="center">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+    <div align="left"><%=time%></div>
+  </div> -->
     <div class="center">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
   <%}%>
   </td>
-  <td valign="top" class="ltgreybackground">
+  <td nowrap="nowrap" align="left" valign="top">
     <%for (var i = 0; i < users.length; i++) {%>
       <div class="center">&bull; <%=users[i].UserRole%></div>
     <%}%>
 	</td>
+  <td valign="top" class="ltgreybackground">
+  <%for (var i = 0; i < users.length; i++) {%>
+    <div class="center">&bull; <%=users[i].NUM%></div>
+  <%}%>
+  </td>
   <tr>
-    <th nowrap="nowrap" align="center" valign="top">Last CVE Created</th>
+    <th nowrap="nowrap" align="center" valign="top">User Last CVE Created</th>
     <th valign="top" class="sub">CVE Name</th>
+    <th valign="top" class="sub">CVE Time</th>
   </tr>
-  <td nowrap="nowrap" align="left" valign="top">
-    <%for (var i = 0; i < users.length; i++) {%>
+  <td valign="top" class="ltgreybackground">
+    <%for (var i = 0; i < cves.length; i++) {%>
       <div class="center">&bull; <a href="/user/<%=cves[i].Username%>"><%=cves[i].Username%></a></div>
       <%}%>
     </td>
     <td valign="top" class="ltgreybackground">
       <%for (var i = 0; i < cves.length; i++) {%>
         <div class="center">&bull; <a href="/CVE/<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></div>
-        <%}%>
-      </td>
+      <%}%>
+    </td>
+      <td valign="top" class="ltgreybackground">
+        <%for (var i = 0; i < cves.length; i++) {%>
+          <% var a = new Date(cves[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+          <div class="center">&bull; <%=time%></div>
+          <%}%>
+        </td>
 	<tr>
-		<th colspan="2">Add New Member</th>
+		<th colspan="3">Add New Member</th>
 	</tr>
   <td nowrap="nowrap" align="center" valign="top">
     <form class="" action="/group/invite" method="post">

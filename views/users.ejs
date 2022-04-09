@@ -18,17 +18,17 @@
       <a href="/CVE/">CVEs</a>
       <a href="/group/">Groups</a>
       <% if(username==false){ %>
-        <div class="topnav-right">
-          <a href="/login">Login</a>
-          <a href="/register">Register</a>
-        </div>
-        <% }%>
-        <%if(username){ %>
-          <div class="topnav-right">
-            <a href="/group/">Group</a>
-            <a href="/account/"><%=username %></a>
-          </div>
-        <%}%>
+      <div class="topnav-right">
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </div>
+      <% }%>
+      <%if(username){ %>
+      <div class="topnav-right">
+        <a href="/account/group">Group</a>
+        <a href="/account/"><%=username.Email %></a>
+      </div>
+      <%}%>
     </div>
     <form>
       <input type="search" name="search" placeholder="Search User"/>

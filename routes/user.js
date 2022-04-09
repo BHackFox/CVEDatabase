@@ -29,7 +29,7 @@ route.get("/",async (req,res)=>{
   //   data[0].NUM = 0;
   // }
   if (req.user){
-    user = req.user.Email
+    user = req.user;
   }
   res.render("users",{username:user,users:data})
 })
@@ -42,7 +42,7 @@ route.get("/:user", async(req,res)=>{
   console.log(group);
   let user = false;
   if(req.user){
-    user = req.user.Email;
+    user = req.user;
   }
   console.log(data.length);
   if (data[0]) {

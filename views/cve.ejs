@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
+  </head>
+  <body>
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
@@ -22,13 +24,11 @@
         <% }%>
         <%if(username){ %>
           <div class="topnav-right">
-            <a href="/group/">Group</a>
-            <a href="/account/"><%=username %></a>
+            <a href="/account/group">Group</a>
+            <a href="/account/"><%=username.Email %></a>
           </div>
-        <%}%>
-      </div>
-  </head>
-  <body>
+          <%}%>
+        </div>
     <div id="GeneratedTable">
       <table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr>

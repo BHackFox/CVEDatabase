@@ -9,26 +9,26 @@
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
+  </head>
+  <body>
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
       <a href="/CVE/">CVEs</a>
       <a href="/group/">Groups</a>
       <% if(username==false){ %>
-        <div class="topnav-right">
-          <a href="/login">Login</a>
-          <a href="/register">Register</a>
-        </div>
-        <% }%>
-        <%if(username){ %>
-          <div class="topnav-right">
-            <a href="/group/">Group</a>
-            <a href="/account/"><%=username %></a>
-          </div>
-        <%}%>
+      <div class="topnav-right">
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
       </div>
-  </head>
-  <body>
+      <% }%>
+      <%if(username){ %>
+      <div class="topnav-right">
+        <a href="/account/group">Group</a>
+        <a href="/account/"><%=username.Email %></a>
+      </div>
+      <%}%>
+    </div>
     <div class="home">
       <div id="GeneratedTable">
         <table cellpadding="0" cellspacing="0" border="0" width="100%">

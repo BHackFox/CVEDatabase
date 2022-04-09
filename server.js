@@ -72,7 +72,7 @@ app.get("/",async (req,res)=>{
       else {
         let user = false;
         if (req.user) {
-          user = req.user.Email
+          user = req.user;
         }
         res.render('join',{username:user,join:false,data:url[0]});
       }
@@ -83,7 +83,7 @@ app.get("/",async (req,res)=>{
   }
   else {
     if (req.user) {
-      res.render('home',{username:req.user.Email});
+      res.render('home',{username:req.user});
     }
     else {
       res.render('home',{username:false})
