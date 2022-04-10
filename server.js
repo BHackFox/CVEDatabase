@@ -22,7 +22,8 @@ const insertUser = require('./mysql/POST/insertUser');
 const account = require('./routes/account');
 const group = require('./routes/group');
 const cve = require('./routes/cve');
-const user = require('./routes/user')
+const user = require('./routes/user');
+const api = require('./routes/api');
 const getGeneralQuery = require('./mysql/GET/getGeneralQuery');
 
 initializePassport(passport,
@@ -156,6 +157,7 @@ app.use("/account",checkAuthenticated,account);
 app.use("/group",group);
 app.use("/CVE",cve);
 app.use("/user",user);
+app.use("/api",api);
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){

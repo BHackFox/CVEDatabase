@@ -10,6 +10,22 @@
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
   </head>
+  <script type="text/javascript">
+    function apiUser(user,id){
+      fetch("/api/user/"+user)
+      .then(data => data.json())
+      .then((data) => {
+        let di = document.getElementById(id);
+        if (di.textContent.includes(data.Email)) {
+          var x = xmlDoc.getElementsByTagName(data.Email)[0];
+          var y = x.childNodes[0];
+          x.removeChild(y);
+        }
+        var text = document.createTextNode(data.Email);
+        di.appendChild(text)
+      });
+    }
+  </script>
   <body>
     <div class="topnav">
       <a class="active" href="/">Home</a>
@@ -64,7 +80,10 @@
 	</tr>
   <td nowrap="nowrap" align="left" valign="top">
   <%for (var i = 0; i < users.length; i++) {%>
-    <div class="center">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+    <div class="dropdown">
+      <div class="center" onmouseover="apiUser('<%= users[i].Username %>','<%=i%>')">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+      <div class="dropdown-content" id="<%=i%>"></div>
+    </div>
   <%}%>
   </td>
   <td nowrap="nowrap" align="left" valign="top">
