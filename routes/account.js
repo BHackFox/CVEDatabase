@@ -40,6 +40,11 @@ route.get("/group",async(req,res)=>{
 })
 
 
+route.get("/newCVE",async(req,res)=>{
+  let user = req.user;
+  res.render("newcve",{username:user});
+})
+
 
 
 module.exports = route;

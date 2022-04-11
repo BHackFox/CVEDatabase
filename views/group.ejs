@@ -15,13 +15,14 @@
       fetch("/api/user/"+user)
       .then(data => data.json())
       .then((data) => {
+        if (!data.Name) {
+          data.Name="...";
+        }
         let di = document.getElementById(id);
         if (di.textContent.includes(data.Email)) {
-          var x = xmlDoc.getElementsByTagName(data.Email)[0];
-          var y = x.childNodes[0];
-          x.removeChild(y);
+          di.removeChild(di.childNodes[0]);
         }
-        var text = document.createTextNode(data.Email);
+        var text = document.createTextNode(data.Email+"\n"+data.Name);
         di.appendChild(text)
       });
     }

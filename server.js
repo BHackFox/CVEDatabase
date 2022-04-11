@@ -62,7 +62,7 @@ app.get("/",async (req,res)=>{
   req.session.redirect = "/";
   if (req.query.join) {
     console.log("si");
-    let url = await getGeneralQuery(connection,`SELECT * from InviteInGroup WHERE UrlInvite="${req.query.join}"`);
+    let url = await getGeneralQuery(connection,`SELECT * from InviteInGroup WHERE UrlInvite="${req.query.join}" AND Used=0`);
     console.log(url);
     if(url[0]){
       req.session.redirect = "/?join="+req.query.join;

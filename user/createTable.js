@@ -1,7 +1,7 @@
 
 
 async function run(connection){
-  await dumpTABLES(connection);
+  //await dumpTABLES(connection);
   let createTABLES = [
     `CREATE TABLE IF NOT EXISTS Users(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -50,7 +50,22 @@ async function run(connection){
     CVELinks TEXT,
     CVENote TEXT,
     CVEConfermation BOOLEAN DEFAULT FALSE,
-    TimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`
+    TimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)`,
+
+    `CREATE TABLE IF NOT EXISTS Tags(
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      TagName VARCHAR(30) NOT NULL,
+      TagDescription VARCHAR(30) NOT NULL,
+      TagTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    )`,
+
+    `CREATE TABLE IF NOT EXISTS HasTags(
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      TagName VARCHAR(30) NOT NULL,
+      CVEName VARCHAR(30) NOT NULL,
+      Username VARCHAR(30) NOT NULL,
+      TagTimeUsed TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    )`
     ];
     for (var i = 0; i < createTABLES.length; i++) {
       new Promise((resolve,reject)=>{

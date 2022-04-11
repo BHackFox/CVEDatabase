@@ -10,6 +10,23 @@
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
   </head>
+  <script type="text/javascript">
+    function apiUser(user,id){
+      fetch("/api/user/"+user)
+      .then(data => data.json())
+      .then((data) => {
+        if (!data.Name) {
+          data.Name="...";
+        }
+        let di = document.getElementById(id);
+        if (di.textContent.includes(data.Email)) {
+          di.removeChild(di.childNodes[0]);
+        }
+        var text = document.createTextNode(data.Email+"\n"+data.Name);
+        di.appendChild(text)
+      });
+    }
+  </script>
   <div class="topnav">
     <a class="active" href="/">Home</a>
     <a href="/user/">Users</a>
@@ -56,12 +73,10 @@
         </tr>
         <td nowrap="nowrap" align="left" valign="top">
           <%for (var i = 0; i < users.length; i++) {%>
-          <% var a = new Date(users[i].UserTimeJoin);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
-            <!-- <div class="row" align="center">
-            <div class="center">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
-            <div align="left"><%=time%></div>
-          </div> -->
-          <div class="center">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+            <div class="dropdown">
+              <div class="center" onmouseover="apiUser('<%= users[i].Username %>','<%=i%>')">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+              <div class="dropdown-content" id="<%=i%>"></div>
+            </div>
           <%}%>
         </td>
         <td nowrap="nowrap" align="left" valign="top">
@@ -107,7 +122,7 @@
             <input type="text" name="UserRole" placeholder="User Role">
             <input type="hidden" name="GroupName" value="<%=data.GroupName%>">
             <input type="hidden" name="InviteMember" value="<%=username.Username%>">
-            <input type="submit" value="Send">
+            <button type="submit">Add</button>
           </form>
         </td>
       </table>

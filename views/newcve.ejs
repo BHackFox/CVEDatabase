@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <title><%=data.CVEName%> CVEDatabase</title>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
+    <link rel="stylesheet" type="text/css" href="css/footer.css" />
+    <link rel="stylesheet" type="text/css" href="css/table.css" />
+    <link rel="stylesheet" type="text/css" href="css/topnav.css" />
+    <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
+  </head>
+  <body>
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="/user/">Users</a>
+      <a href="/CVE/">CVEs</a>
+      <a href="/group/">Groups</a>
+      <% if(username==false){ %>
+        <div class="topnav-right">
+          <a href="/login">Login</a>
+          <a href="/register">Register</a>
+        </div>
+        <% }%>
+        <%if(username){ %>
+          <div class="topnav-right">
+            <a href="/account/group">Group</a>
+            <a href="/account/"><%=username.Email %></a>
+          </div>
+          <%}%>
+        </div>
+    <div id="GeneratedTable">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+		<th colspan="2">CVE-Name</th>
+	</tr>
+	<tr>
+		<td nowrap="nowrap" align="center" valign="top">
+			<h2><%=data.CVEName%></h2>
+		</td>
+		<td valign="top" class="ltgreybackground">
+			<div class="larger"><a href="https://github.com/BHackFox/CVEDatabase" target="_blank">Learn more at CVE Database by Federico Rosatelli</a></div>
+			<div class="smaller">&bull; Federico Rosatelli</div>
+      <div class="smaller">&bull; 1882771</div>
+		</td>
+	</tr>
+  <tr>
+    <th nowrap="nowrap" align="center" valign="top">Title</th>
+		<th valign="top" class="sub">User</th>
+	</tr>
+	<tr>
+		<td nowrap="nowrap" align="center" valign="top">
+      <h2><%=data.CVETitle%></h2>
+    </td>
+    <td valign="top" class="ltgreybackground">
+			<div class="center"><a href="http://127.0.0.1:3000/user/<%=data.CVEUserCreate%>" target="_blank"><%=data.CVEUserCreate%></a></div>
+		</td>
+	</tr>
+	<tr>
+		<th colspan="2">Description</th>
+	</tr>
+	<tr>
+		<td colspan="2"><%=data.CVEDescription%></td>
+	</tr>
+	<tr>
+		<th colspan="2">References</th>
+	</tr>
+    </div>
+    <div class="footer">
+      <h1>ciao</h1>
+    </div>
+  </body>
+</html>
