@@ -152,6 +152,11 @@ app.get("/recreate",async (req,res)=>{
   }
 })
 
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
 app.use("/account",checkAuthenticated,account);
 
 app.use("/group",group);

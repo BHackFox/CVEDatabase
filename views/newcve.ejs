@@ -1,15 +1,93 @@
 <!DOCTYPE html>
 <html>
-  <title><%=data.CVEName%> CVEDatabase</title>
+  <title><%=username.Username%> Account</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
     <link rel="stylesheet" type="text/css" href="css/footer.css" />
-    <link rel="stylesheet" type="text/css" href="css/table.css" />
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
+    <link rel="stylesheet" type="text/css" href="css/forms.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
+  </script>
+  <script type="text/javascript">
+    fetch("/api/tags")
+    .then((data)=>data.json())
+    .then((data)=>{
+      let id = document.getElementById('tg');
+      for (var i = 0; i < data.length; i++) {
+        let html = data[i].TagName
+        var text = document.createElement('option');
+        text.value = html;
+        text.innerHTML = html;
+        id.appendChild(text)
+      }
+    })
+    function getTags(){
+      fetch("/api/tags")
+      .then((data)=>data.json())
+      .then((data)=>{
+        let id = document.getElementById('tg');
+        id.innerHTML = '';
+        for (var i = 0; i < data.length; i++) {
+          let html = data[i].TagName
+          var text = document.createElement('option');
+          text.value = html;
+          text.innerHTML = html;
+          id.appendChild(text)
+        }
+      })
+    };
+
+    function postTag() {
+      let name = document.getElementById("newTagName")
+      let desc = document.getElementById("newTagDescription");
+      fetch("/api/tags/newtag",{
+        method:'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+          'TagName':name.value,
+          'TagDescription':desc.value
+        })
+      })
+      .then((data) => data.json())
+      .then((data)=>{
+        if (data.response) {
+          getTags();
+        }
+      })
+    }
+
+    function postCVE() {
+      let title = document.getElementById("title");
+      let desc = document.getElementById("desc");
+
+      fetch("/cve/newCVE",{
+        method:'POST',
+        headers:{
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+          'CVETitle':title.value,
+          'CVEDescription':desc.value
+        }),
+        redirect: "follow"
+      })
+      .then(response =>{
+        console.log(response);
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
+      })
+    }
+
+  </script>
   <body>
     <div class="topnav">
       <a class="active" href="/">Home</a>
@@ -24,50 +102,88 @@
         <% }%>
         <%if(username){ %>
           <div class="topnav-right">
-            <a href="/account/group">Group</a>
+            <a href="group">Group</a>
             <a href="/account/"><%=username.Email %></a>
           </div>
           <%}%>
         </div>
     <div id="GeneratedTable">
       <table cellpadding="0" cellspacing="0" border="0" width="100%">
-	<tr>
-		<th colspan="2">CVE-Name</th>
-	</tr>
-	<tr>
-		<td nowrap="nowrap" align="center" valign="top">
-			<h2><%=data.CVEName%></h2>
-		</td>
-		<td valign="top" class="ltgreybackground">
-			<div class="larger"><a href="https://github.com/BHackFox/CVEDatabase" target="_blank">Learn more at CVE Database by Federico Rosatelli</a></div>
-			<div class="smaller">&bull; Federico Rosatelli</div>
-      <div class="smaller">&bull; 1882771</div>
-		</td>
-	</tr>
-  <tr>
-    <th nowrap="nowrap" align="center" valign="top">Title</th>
-		<th valign="top" class="sub">User</th>
-	</tr>
-	<tr>
-		<td nowrap="nowrap" align="center" valign="top">
-      <h2><%=data.CVETitle%></h2>
-    </td>
-    <td valign="top" class="ltgreybackground">
-			<div class="center"><a href="http://127.0.0.1:3000/user/<%=data.CVEUserCreate%>" target="_blank"><%=data.CVEUserCreate%></a></div>
-		</td>
-	</tr>
-	<tr>
-		<th colspan="2">Description</th>
-	</tr>
-	<tr>
-		<td colspan="2"><%=data.CVEDescription%></td>
-	</tr>
-	<tr>
-		<th colspan="2">References</th>
-	</tr>
+         <tr>
+             <th nowrap="nowrap" align="center" valign="top">Title</th>
+		         <th valign="top" class="sub">User</th>
+	       </tr>
+	       <tr>
+           <td nowrap="nowrap" align="center" valign="top">
+                <input type="form" name="search" id="title" placeholder="CVE Title"/>
+           </td>
+             <td valign="top" class="ltgreybackground">
+			           <div class="center"><a href="/user/<%=username.Username%>" target="_blank"><%=username.Username%></a></div>
+		         </td>
+	       </tr>
+	       <tr>
+		         <th colspan="4">Description</th>
+	       </tr>
+	       <tr>
+             <td nowrap="nowrap" align="left" valign="top">
+               <textarea name="var_1" id="desc" rows="10" cols="50" wrap="hard"></textarea>
+             </td>
+	       </tr>
+         <tr>
+           <th nowrap="nowrap" align="center" valign="top">Tags</th>
+           <th valign="top" class="sub">Add new Tag</th>
+	       </tr>
+	       <tr>
+             <!-- <td nowrap="nowrap" align="left" valign="top" id="tg"> -->
+<td>
+    <select multiple id="tg">
+    </select>
+    <button id="add">Add Tags</button>
+    <div id="tgadd">
+  </div>
+             </td>
+             <td nowrap="nowrap" align="left" valign="top" id="nwtg">
+               <input type="text" id="newTagName" placeholder="Name">
+               <input type="text" id="newTagDescription" placeholder="Description">
+               <button type="submit" name="button" onclick="postTag()">OK</button>
+             </td>
+	       </tr>
+         <tr>
+           <th nowrap="nowrap" align="center" valign="top">Create CVE</th>
+	       </tr>
+         <tr>
+             <td nowrap="nowrap" align="left" valign="top">
+               <button type="button" name="button" onclick="postCVE()">Create CVE</button>
+             </td>
+	       </tr>
+      </table>
     </div>
     <div class="footer">
       <h1>ciao</h1>
     </div>
   </body>
+  <script type="text/javascript">
+  var selected = [];
+  document.getElementById('add').onclick = function() {
+    for (var option of document.getElementById('tg').options){
+        if (option.selected && !selected.includes(option.value)) {
+            selected.push(option.value);
+            let id = document.getElementById('tgadd');
+            var text = document.createElement('div');
+            text.classList.add("row");
+            text.innerHTML = "<h4>&bull;"+option.value+"</h4><i class='material-icons' onclick='removeDiv("+'"'+option.value+'"'+")'>delete_outline</i>";
+            text.id = option.value;
+            id.appendChild(text);
+        }
+    }
+  }
+
+  function removeDiv(id) {
+    let id1 = document.getElementById('tgadd');
+    let id2 = document.getElementById(id);
+    id1.removeChild(id2);
+    let ind = selected.indexOf(id);
+    selected.splice(ind,1)
+  }
+  </script>
 </html>
