@@ -2,6 +2,22 @@
   border:1px solid #000000;
   border-collapse: collapse;
 }
+#GeneratedTable .folder{
+  font-size: 120%;
+  font-weight: bold;
+  padding: 2px 5px 2px 20px;
+  text-align: left;
+  vertical-align:top;
+  background-color: #59341b;
+  color:#ffffff;
+  border-top:1px solid #000000;
+  border-bottom:1px solid #000000
+}
+#GeneratedTable .account{
+  border-left:1px solid #cccccc;
+  background: #c8e5f5;
+
+}
 #GeneratedTable th {
   font-size: 120%;
   font-weight: bold;

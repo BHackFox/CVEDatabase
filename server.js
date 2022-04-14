@@ -58,7 +58,18 @@ app.use(methodOverride('_method'))
 
 app.get("/",async (req,res)=>{
   req.session.error = "";
-
+  var ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress).substring(7);
+  console.log(ip);
+  var data = fs.readFileSync('../ip.json',{encoding:'utf-8',flag:'r'});
+  var ips = JSON.parse(data);
+  if (ips[ip]) {
+    ips[ip].push(new Date());
+  }
+  else {
+    ips[ip] = []
+    ips[ip].push(new Date());
+  }
+  fs.writeFileSync('../ip.json', JSON.stringify(ips,null,2))
   req.session.redirect = "/";
   if (req.query.join) {
     console.log("si");
@@ -156,6 +167,10 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
+
+app.get('/minecraft',(req,res)=>{
+  res.json({ip:"84.221.10.247",port:25565})
+})
 
 app.use("/account",checkAuthenticated,account);
 

@@ -25,20 +25,20 @@
         <% }%>
         <%if(username){ %>
           <div class="topnav-right">
-            <a href="/account/group">Group</a>
-            <a href="/account/"><%=username.Email %></a>
+            <a href="/account/" id="account"><%=username.Email %></a>
+            <a href="/account/group" id="group">Group</a>
           </div>
         <%}%>
     </div>
     <form>
-      <input type="search" name="search" placeholder="Search User"/>
+      <input type="search" name="search" placeholder="Search Group"/>
       <button type="submit">Search</button>
     </form>
     <div class="home">
 
 <table id="table">
   <tr>
-    <td>Username</td>
+    <td>Group Name</td>
     <td>Number of CVE</td>
     <td>Number of Users</td>
   </tr>

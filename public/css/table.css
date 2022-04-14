@@ -10,6 +10,11 @@
  border: 1px solid #ddd;
  padding: 20px;
 }
+#table .title{
+  font-size: 25px;
+  background-color: #999999;
+  text-align: center;
+}
 #table tr:nth-child(even){background-color: #f2f2f2;}
 #table tr:hover {background-color: #ddd;}
 #table th {

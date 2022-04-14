@@ -14,13 +14,18 @@
   font-size: 17px;
 }
 .topnav a:hover {
-  background-color: #ddd;
+  background-color: #c8e5f5;
   color: black;
 }
 .topnav a.active {
   background-color: #04AA6D;
   color: white;
 }
-.topnav-right {
+.topnav-right #account{
   float: right;
+  background-color: #0095e5;
+}
+.topnav-right #group{
+  float: right;
+  background-color: #59341b;
 }

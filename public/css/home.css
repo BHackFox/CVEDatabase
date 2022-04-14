@@ -1,3 +1,14 @@
+.my{
+  background-color: #adebf7;
+  background: #adebf7;
+  position: relative;
+  margin: 0;
+  padding-top: 7rem;
+  padding-bottom: 6rem;
+  min-height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
 body {
   position: relative;
   margin: 0;

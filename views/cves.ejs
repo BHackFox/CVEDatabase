@@ -9,7 +9,9 @@
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/search.css" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.6.96/css/materialdesignicons.min.css">
     <div class="topnav">
       <a class="active" href="/">Home</a>
       <a href="/user/">Users</a>
@@ -23,8 +25,8 @@
         <% }%>
         <%if(username){ %>
           <div class="topnav-right">
-            <a href="/account/group">Group</a>
-            <a href="/account/"><%=username.Email %></a>
+            <a href="/account/" id="account"><%=username.Email %></a>
+            <a href="/account/group" id="group">Group</a>
           </div>
         <%}%>
       </div>
@@ -40,16 +42,19 @@
         <td>CVE Title</td>
         <td>User</td>
         <td>Time</td>
-        <td>ID</td>
+        <td>Verified</td>
       </tr>
   <%for(var i=0; i<cves.length; i++){%>
     <% var a = new Date(cves[i].TimeCreation);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
     <tr>
+      <% var html1 = "<i class='material-icons' style='color:#96b365'>done_outline</i>"
+          var html2 = "<i class='material-icons' style='color:#ff0000'>close</i>"
+      %>
       <td><a href="<%=cves[i].CVEName%>"><%=cves[i].CVEName%></a></td>
       <td><%=cves[i].CVETitle%></td>
       <td><a href="../user/<%=cves[i].CVEUserCreate%>"><%=cves[i].CVEUserCreate%></a></td>
       <td><%=time%></td>
-      <td><%=cves[i].id%></td>
+      <td><%-cves[i].CVEConfermation==1 ? html1 : html2%></td>
     </tr>
   <%}%>
   </table>
