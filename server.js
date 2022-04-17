@@ -156,11 +156,9 @@ app.get("/recreate",async (req,res)=>{
     await createTable(connection);
   } catch (e) {
     console.error(e);
-    res.send("NO")
-  } finally {
-    console.log("Fatto");
-    res.redirect("/");
+    res.send(e)
   }
+    res.redirect("/");
 })
 
 app.get('/logout', function(req, res){

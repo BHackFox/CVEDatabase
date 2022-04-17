@@ -11,6 +11,29 @@
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/search.css" />
   </head>
+  <script type="text/javascript">
+  function updateName() {
+    let name = document.getElementById("newName")
+    fetch("/api/user",{
+      method:'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        'name':name.value
+      })
+    })
+    .then((data) => data.json())
+    .then((data)=>{
+      if (data.response) {
+        let newName = document.getElementById("name");
+        var text = document.createTextNode(name.value);
+        newName.appendChild(text);
+      }
+    })
+  }
+  </script>
   <body>
     <div class="topnav">
       <a class="active" href="/">Home</a>
@@ -34,7 +57,7 @@
       <div id="GeneratedTable">
         <table cellpadding="0" cellspacing="0" border="0" width="100%">
     <tr>
-      <th colspan="2">My Username</th>
+      <th colspan="1" class="folder">My Username</th>
     </tr>
     <tr>
       <td nowrap="nowrap" align="center" valign="top" class="account">
@@ -49,7 +72,11 @@
     </tr>
     <tr>
       <td nowrap="nowrap" align="left" valign="top">
-        <div class="smaller"><%= data.Name ? data.Name : "..."%></div>
+        <div class="smaller" id="name"><%= data.Name ? data.Name : "..."%></div>
+        <div>
+          <input type="text" id="newName" placeholder="Name">
+          <button type="submit" name="button" onclick="updateName()">OK</button>
+        </div>
       </td>
     </tr>
     <tr>

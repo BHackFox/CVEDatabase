@@ -27,5 +27,10 @@
 }
 .topnav-right #group{
   float: right;
-  background-color: #59341b;
+  background-color: #0a699d;
+}
+
+.topnav-right{
+  float: right;
+  background-color: #0a699d;
 }

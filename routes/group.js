@@ -43,7 +43,7 @@ route.post("/groupJoin",async(req,res)=>{
     UserRole: req.body.UserRole
   };
   await postGeneralQuery(connection,`INSERT INTO UserJoinGroup(Username,GroupName,UserRole) VALUES("${data.Username}","${data.GroupName}","${data.UserRole}")`);
-  await postGeneralQuery(connection,`UPDATE InviteInGroup SET Used=1 WHERE UrlInvite="${req.body.UrlInvite}"`);
+  //await postGeneralQuery(connection,`UPDATE InviteInGroup SET Used=1 WHERE UrlInvite="${req.body.UrlInvite}"`);
   res.redirect("/account/group")
 })
 

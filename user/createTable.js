@@ -65,7 +65,11 @@ async function run(connection){
       CVEName VARCHAR(30) NOT NULL,
       Username VARCHAR(30) NOT NULL,
       TagTimeUsed TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-    )`
+    )`,
+    `CREATE TRIGGER UpdateUserJoin
+      AFTER INSERT ON UserJoinGroup
+      FOR EACH ROW
+        UPDATE InviteInGroup SET Used = 1 WHERE InviteInGroup.Username = new.Username`
     ];
     for (var i = 0; i < createTABLES.length; i++) {
       new Promise((resolve,reject)=>{

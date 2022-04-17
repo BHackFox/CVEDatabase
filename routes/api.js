@@ -40,6 +40,11 @@ route.post("/tags/newtag", checkAuthenticated,async(req,res)=>{
   res.json({response:true})
 })
 
+route.post("/user/",checkAuthenticated,async(req,res)=>{
+  console.log(req.body);
+  await postGeneralQuery(connection,`UPDATE Users SET Name="${req.body.name}" WHERE Username="${req.user.Username}"`);
+  res.json({response:true})
+})
 
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){
