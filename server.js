@@ -24,6 +24,7 @@ const group = require('./routes/group');
 const cve = require('./routes/cve');
 const user = require('./routes/user');
 const api = require('./routes/api');
+const tag = require('./routes/tag');
 const getGeneralQuery = require('./mysql/GET/getGeneralQuery');
 
 initializePassport(passport,
@@ -176,6 +177,7 @@ app.use("/group",group);
 app.use("/CVE",cve);
 app.use("/user",user);
 app.use("/api",api);
+app.use("/tag",tag);
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){

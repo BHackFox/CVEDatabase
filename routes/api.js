@@ -36,7 +36,7 @@ route.get("/tags/:tag",async(req,res)=>{
 
 route.post("/tags/newtag", checkAuthenticated,async(req,res)=>{
   console.log(req.body);
-  await postGeneralQuery(connection,`INSERT INTO Tags(TagName,TagDescription) VALUES("${req.body.TagName}","${req.body.TagDescription}")`);
+  await postGeneralQuery(connection,`INSERT INTO Tags(TagName,TagDescription,TagOS) VALUES("${req.body.TagName}","${req.body.TagDescription}","${req.body.TagOS}")`);
   res.json({response:true})
 })
 

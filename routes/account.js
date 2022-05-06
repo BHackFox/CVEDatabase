@@ -44,7 +44,8 @@ route.get("/group",async(req,res)=>{
 
 route.get("/newCVE",async(req,res)=>{
   let user = req.user;
-  res.render("newcve",{username:user});
+  let ostags = await getGeneralQuery(connection,`SELECT OSName FROM OSTag`);
+  res.render("newcve",{username:user,ostags:ostags});
 })
 
 

@@ -18,8 +18,12 @@
   color: black;
 }
 .topnav a.active {
-  background-color: #04AA6D;
+  background-color: #640000;
   color: white;
+}
+.topnav a.active:hover {
+  background-color: #eda16a;
+  color: black;
 }
 .topnav-right #account{
   float: right;

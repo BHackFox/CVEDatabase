@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title><%=username.Username%> Account</title>
+  <title>Create New CVE | CVEDatabase</title>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/footer.css" />
@@ -45,6 +45,7 @@
     function postTag() {
       let name = document.getElementById("newTagName")
       let desc = document.getElementById("newTagDescription");
+      let os = document.getElementById("os");
       fetch("/api/tags/newtag",{
         method:'POST',
         headers: {
@@ -53,7 +54,8 @@
         },
         body:JSON.stringify({
           'TagName':name.value,
-          'TagDescription':desc.value
+          'TagDescription':desc.value,
+          'TagOs':os.value
         })
       })
       .then((data) => data.json())
@@ -170,7 +172,22 @@
         <div class="popup-content">
           <input type="form" id="newTagName" placeholder="Tag Name...">
           <input type="form" id="newTagDescription" placeholder="Tag Description..">
-          <button type="button" id="closePopup" onclick="postTag();closeForm();">Create Tag</button>
+          <div class="row">
+            <div class="options">
+              <select name="chos" id="os">
+                <%for(var i=0; i<ostags.length; i++){%>
+                  <option value="<%=ostags[i].OSName%>"><%=ostags[i].OSName%></option>
+                  <%}%>
+                </select>
+              </div>
+              <div class="options">
+                <select name="chtype" id="type">
+                  <option value="Local">Local</option>
+                  <option value="Remote">Remote</option>
+                </select>
+              </div>
+          </div>
+          <button type="button" id="closePopup" onclick="postTag();closeForm();" style="bottom:0px;">Create Tag</button>
           <button type="button" id="closePopup" onclick="closeForm();">Close</button>
         </div>
       </div>

@@ -85,7 +85,7 @@ async function run(connection){
     `CREATE TABLE IF NOT EXISTS OSTag(
       id INT PRIMARY KEY AUTO_INCREMENT,
       OSName VARCHAR(30) NOT NULL,
-      OSDescription VARCHAR(30) NOT NULL,
+      OSDescription TEXT NOT NULL,
       TimesUsed INT DEFAULT 0
     )`
     ];
