@@ -7,8 +7,6 @@
 .dropdown-content {
   display: none;
   position: absolute;
-
-  background-color: #f9f9f9;
   min-width: 100px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
@@ -16,4 +14,17 @@
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.dropdown-image{
+  background-image: url(../images/loading.gif);
+  background-size: 100px;
+  background-repeat: no-repeat;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.dropdown-content p{
+  color: #000;
 }

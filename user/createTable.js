@@ -2,6 +2,19 @@
 
 async function run(connection){
   //await dumpTABLES(connection);
+  //await dumpTABLE(connection,"Tags")
+  await dumpTRIGGERS(connection);
+  let triggers = [
+    `CREATE TRIGGER updateOSTimeUsed
+      AFTER INSERT ON HasTags
+      FOR EACH ROW
+        UPDATE OSTags SET TimesUsed = TimesUsed + 1 WHERE (SELECT Tags.TagOS FROM Tags,HasTags WHERE new.TagName = Tags.TagName) = OSTags.OSName`,
+
+    `CREATE TRIGGER UpdateUserJoin
+      AFTER INSERT ON UserJoinGroup
+      FOR EACH ROW
+        UPDATE InviteInGroup SET Used = 1 WHERE InviteInGroup.Username = new.Username`
+  ]
   let createTABLES = [
     `CREATE TABLE IF NOT EXISTS Users(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -56,6 +69,9 @@ async function run(connection){
       id INT PRIMARY KEY AUTO_INCREMENT,
       TagName VARCHAR(30) NOT NULL,
       TagDescription VARCHAR(30) NOT NULL,
+      TagOS VARCHAR(30),
+      TagLenguage VARCHAR(30),
+      TagType VARCHAR(30),
       TagTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     )`,
 
@@ -66,11 +82,14 @@ async function run(connection){
       Username VARCHAR(30) NOT NULL,
       TagTimeUsed TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     )`,
-    `CREATE TRIGGER UpdateUserJoin
-      AFTER INSERT ON UserJoinGroup
-      FOR EACH ROW
-        UPDATE InviteInGroup SET Used = 1 WHERE InviteInGroup.Username = new.Username`
+    `CREATE TABLE IF NOT EXISTS OSTag(
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      OSName VARCHAR(30) NOT NULL,
+      OSDescription VARCHAR(30) NOT NULL,
+      TimesUsed INT DEFAULT 0
+    )`
     ];
+    //await createTABLE(connection,createTABLES[6]);
     for (var i = 0; i < createTABLES.length; i++) {
       new Promise((resolve,reject)=>{
         connection.query(createTABLES[i],function(err,results,fields){
@@ -82,10 +101,26 @@ async function run(connection){
     }
 }
 
-
+function createTABLE(connection,table){
+  new Promise((resolve,reject)=>{
+    connection.query(table,function(err,results,fields){
+      if(err){
+        throw err;
+      }
+    });
+  })
+}
 function dumpTABLES(connection) {
-  return new Promise((resolve, reject) =>{
+  new Promise((resolve, reject) =>{
     connection.query(`DROP TABLE Users, CVE, Grps,InviteInGroup,UserJoinGroup`,function(err,results,fields){
+      if (err) {
+        throw err;
+      }
+      return resolve(true);
+    });
+  })
+  new Promise((resolve, reject) =>{
+    connection.query(`DROP TRIGGER updateOSTimeUsed, UpdateUserJoin`,function(err,results,fields){
       if (err) {
         throw err;
       }
@@ -94,4 +129,25 @@ function dumpTABLES(connection) {
   })
 }
 
+function dumpTABLE(connection,table) {
+  new Promise((resolve, reject) =>{
+    connection.query(`DROP TABLE ${table}`,function(err,results,fields){
+      if (err) {
+        throw err;
+      }
+      return resolve(true);
+    });
+  });
+}
+
+function dumpTRIGGERS(connection) {
+  new Promise((resolve, reject) =>{
+    connection.query(`DROP TRIGGER updateOSTimeUsed`,function(err,results,fields){
+      if (err) {
+        throw err;
+      }
+      return resolve(true);
+    });
+  })
+}
 module.exports = run;

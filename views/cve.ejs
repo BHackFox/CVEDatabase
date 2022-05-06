@@ -39,7 +39,16 @@
 			<h2><%=data.CVEName%></h2>
 		</td>
 		<td valign="top" class="ltgreybackground">
-			<div class="larger"><a href="https://github.com/BHackFox/CVEDatabase" target="_blank">Learn more at CVE Database by Federico Rosatelli</a></div>
+      <div class="dropdown">
+        <div class="larger"><a id="github" href="https://github.com/BHackFox/CVEDatabase" target="_blank">Learn more at CVE Database by Federico Rosatelli</a></div>
+        <a id="github" href="https://github.com/BHackFox/CVEDatabase" target="_blank">
+          <div class="dropdown-content">
+            <div class="dropdown-image" id="content">
+              .
+            </div>
+          </div>
+        </a>
+      </div>
 			<div class="smaller">&bull; Federico Rosatelli</div>
       <div class="smaller">&bull; 1882771</div>
 		</td>
@@ -63,11 +72,44 @@
 		<td colspan="2"><%=data.CVEDescription%></td>
 	</tr>
 	<tr>
-		<th colspan="2">References</th>
+		<th colspan="2">Tags</th>
 	</tr>
+  <tr>
+    <td colspan="1">
+      <div class="row">
+      <% for(var i=0; i<tags.length; i++){ %>
+          <div class="dropdown">
+            #<%=tags[i].TagName%>
+            <div class="dropdown-content" id="<%=tags[i].TagName%>">
+              <p><%=tags[i].TagDescription%></p>
+            </div>
+          </div>
+      <%}%>
+      </div>
+    </td>
+  </tr>
     </div>
     <div class="footer">
-      <h1>ciao</h1>
+      <div class="inner">
+        <div class="flex">
+          <div class="sapienza">
+            <p>La Sapienza</p>
+          </div>
+          <div class="autore">
+            <p><a id="git" href="https://github.com/bhackfox/">Federico Rosatelli</a></p>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
+  <script type="text/javascript">
+    document.getElementById("github").onmouseover = function(){
+      fetch("https://api.github.com/users/bhackfox")
+      .then((data)=>data.json())
+      .then((data)=>{
+        let drp = document.getElementById("content");
+        drp.style.backgroundImage = "url("+data.avatar_url+")";
+      })
+    }
+  </script>
 </html>

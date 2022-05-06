@@ -88,6 +88,26 @@
       </td>
     </tr>
     <tr>
+      <td nowrap="nowrap" align="left" valign="top">
+        <form action="/group/createGroup" method="post">
+          <input type="text" name="GroupName" placeholder="Group Name ...">
+          <button type="submit" name="button">Create Group</button>
+        </form>
+      </td>
+    </tr>
+    <tr>
+      <th colspan="2">Invites</th>
+    </tr>
+    <tr>
+      <% for(var i=0; i<invites.length; i++){%>
+        <td nowrap="nowrap" align="left" valign="top">
+            <div class="larger"><a href="/group/<%=invites[i].GroupName%>"><%=invites[i].GroupName%></a>  Group</div>
+            <div class="larger"><%=invites[i].UserRole%></div>
+            <div class="larger"><a href="/?join=<%=invites[i].UrlInvite%>"</a>Join</div>
+        </td>
+      <%}%>
+    </tr>
+    <tr>
       <th colspan="2" align="center" valign="top">
         <form action="/logout" method="get">
           <button type="submit" name="button">Logout</button>
@@ -117,8 +137,18 @@
     <button type="submit">New CVE</button>
   </form>
     </div>
+  </div>
     <div class="footer">
-      <h1>ciao</h1>
+      <div class="inner">
+        <div class="flex">
+          <div class="sapienza">
+            <p>La Sapienza</p>
+          </div>
+          <div class="autore">
+            <p><a id="git" href="https://github.com/bhackfox/">Federico Rosatelli</a></p>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

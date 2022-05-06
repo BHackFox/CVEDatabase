@@ -20,3 +20,8 @@ body {
 .row{
   display: flex;
 }
+
+.flex{
+    display: flex;
+    flex-direction: row;
+}
