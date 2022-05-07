@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/search.css" />
+    <link rel="stylesheet" type="text/css" href="css/forms.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
   <body>
 
@@ -53,7 +55,7 @@
     <div class="dropdown">
       <%=tags[i].TagOS%>
       <div class="dropdown-content">
-        <%=tags[i].OSDescription%>
+        <%=tags[i].OSDescription ? tags[i].OSDescription.substring(0,43) : ""%>...<a onclick='openForm("<%=tags[i].TagOS%>","<%=tags[i].OSDescription%>")' href="#OS">More</a>
       </div>
     </div>
   </td>
@@ -61,7 +63,7 @@
     <div class="dropdown">
       <%=tags[i].TagLanguage%>
       <div class="dropdown-content">
-        <%=tags[i].LanguageDescription%>
+        <%=tags[i].LanguageDescription ? tags[i].LanguageDescription.substring(0,43) : ""%>...<a onclick='openForm("<%=tags[i].TagLanguage%>","<%=tags[i].LanguageDescription%>")' href="#Language">More</a>
       </div>
     </div>
   </td>
@@ -69,6 +71,17 @@
   <td><%=tags[i].Num%></td>
 </tr>
 <%}%>
+    </div>
+    <div>
+      <div class="popup" id="popup">
+        <div class="popup-content">
+          <div class="title" id="title">
+          </div>
+          <div class="desc" id="desc">
+          </div>
+          <button type="button" id="close" onclick="closeForm();">Close</button>
+        </div>
+      </div>
     </div>
     <div class="footer">
       <div class="inner">
@@ -82,5 +95,44 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+    function openForm(title,desc){
+      // document.getElementById("dropOs").style.display = "none";
+      // document.getElementByClass("dropLang").style.display = "none";
+      document.getElementById("popup").style.display = "flex";
+      let allDrop = document.getElementsByClassName("dropdown");
+      for (var i = 0; i < allDrop.length; i++) {
+        allDrop[i].style.display = "contents"
+      }
+
+      let t = document.getElementById("title");
+
+      let h1 = document.createElement('h1');
+      let ti = document.createTextNode(title);
+      h1.appendChild(ti);
+      t.appendChild(h1);
+
+      let d = document.getElementById("desc");
+
+      let h5 = document.createElement('h5');
+      let de = document.createTextNode(desc);
+      h5.appendChild(de);
+      d.appendChild(h5);
+    }
+
+    function closeForm() {
+        $(".popup").fadeOut();
+        // document.getElementById("dropOs").style.display = "block";
+        // document.getElementById("dropLang").style.display = "block";
+        let allDrop = document.getElementsByClassName("dropdown");
+        for (var i = 0; i < allDrop.length; i++) {
+          allDrop[i].style.display = "block"
+        }
+        let t = document.getElementById("title");
+        let d = document.getElementById("desc");
+        t.innerHTML = "";
+        d.innerHTML = "";
+    }
+    </script>
   </body>
 </html>

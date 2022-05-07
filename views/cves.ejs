@@ -55,7 +55,7 @@
       <td><%=cves[i].CVETitle%></td>
       <td><a href="../user/<%=cves[i].CVEUserCreate%>"><%=cves[i].CVEUserCreate%></a></td>
       <td><%for(var k=0; k<cves[i].tags.length; k++){%>
-        #<%=cves[i].tags[k].TagName%>  
+        <a href="../tag/?search=<%=cves[i].tags[k].TagName%>">#<%=cves[i].tags[k].TagName%></a> 
         <%}%></td>
       <td><%=time%></td>
       <td><%-cves[i].CVEConfermation==1 ? html1 : html2%></td>

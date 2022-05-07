@@ -36,7 +36,10 @@ route.get("/tags/:tag",async(req,res)=>{
 
 route.post("/tags/newtag", checkAuthenticated,async(req,res)=>{
   console.log(req.body);
-  await postGeneralQuery(connection,`INSERT INTO Tags(TagName,TagDescription,TagOS,TagLanguage,TagType) VALUES("${req.body.TagName}","${req.body.TagDescription}","${req.body.TagOs}","${req.body.TagLanguage}","${req.body.TagType}")`);
+  let tag = await getGeneralQuery(connection,`SELECT TagName FROM Tags WHERE TagName="${req.body.TagName}"`);
+  if (tag.length===0) {
+    await postGeneralQuery(connection,`INSERT INTO Tags(TagName,TagDescription,TagOS,TagLanguage,TagType) VALUES("${req.body.TagName}","${req.body.TagDescription}","${req.body.TagOs}","${req.body.TagLanguage}","${req.body.TagType}")`);
+  }
   res.json({response:true})
 })
 

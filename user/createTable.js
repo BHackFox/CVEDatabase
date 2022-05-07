@@ -2,7 +2,7 @@
 
 async function run(connection){
   //await dumpTABLES(connection);
-  //await dumpTABLE(connection,"");
+  //await dumpTABLE(connection,"Tags");
   //await dumpTRIGGERS(connection);
   let triggers = [
     `CREATE TRIGGER updateOSTimeUsed

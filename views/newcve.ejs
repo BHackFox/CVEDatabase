@@ -198,8 +198,11 @@
                 </select>
             </div>
           </div>
-          <button type="button" id="closePopup" onclick="postTag();closeForm();" style="bottom:0px;">Create Tag</button>
-          <button type="button" id="closePopup" onclick="closeForm();">Close</button>
+          <div class="row">
+
+          </div>
+          <button type="button" id="post" onclick="postTag();closeForm();" style="bottom:0px;">Create Tag</button>
+          <button type="button" id="close" onclick="closeForm();">Close</button>
         </div>
       </div>
     </div>
@@ -221,7 +224,7 @@
     document.getElementById("popup").style.display = "flex";
   }
 
-  function closeForm() {
+  function closeForm(pop) {
       $(".popup").fadeOut();
   }
   var selected = [];
