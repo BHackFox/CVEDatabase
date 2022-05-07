@@ -16,6 +16,10 @@
   display: block;
 }
 
+.dropdown:hover td .dropdown-content{
+  display: block;
+}
+
 .dropdown-image{
   background-image: url(../images/loading.gif);
   background-size: 100px;

@@ -46,6 +46,8 @@
       let name = document.getElementById("newTagName")
       let desc = document.getElementById("newTagDescription");
       let os = document.getElementById("os");
+      let lang = document.getElementById("language");
+      let type = document.getElementById("type");
       fetch("/api/tags/newtag",{
         method:'POST',
         headers: {
@@ -55,7 +57,9 @@
         body:JSON.stringify({
           'TagName':name.value,
           'TagDescription':desc.value,
-          'TagOs':os.value
+          'TagOs':os.value,
+          'TagLanguage':lang.value,
+          'TagType':type.value
         })
       })
       .then((data) => data.json())
@@ -179,13 +183,20 @@
                   <option value="<%=ostags[i].OSName%>"><%=ostags[i].OSName%></option>
                   <%}%>
                 </select>
-              </div>
-              <div class="options">
-                <select name="chtype" id="type">
-                  <option value="Local">Local</option>
-                  <option value="Remote">Remote</option>
+            </div>
+            <div class="options">
+              <select name="chtype" id="type">
+                <option value="Local">Local</option>
+                <option value="Remote">Remote</option>
+              </select>
+            </div>
+            <div class="options">
+              <select name="chos" id="language">
+                <%for(var i=0; i<langtag.length; i++){%>
+                  <option value="<%=langtag[i].LanguageName%>"><%=langtag[i].LanguageName%></option>
+                  <%}%>
                 </select>
-              </div>
+            </div>
           </div>
           <button type="button" id="closePopup" onclick="postTag();closeForm();" style="bottom:0px;">Create Tag</button>
           <button type="button" id="closePopup" onclick="closeForm();">Close</button>

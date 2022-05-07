@@ -2,8 +2,8 @@
 
 async function run(connection){
   //await dumpTABLES(connection);
-  //await dumpTABLE(connection,"Tags")
-  await dumpTRIGGERS(connection);
+  //await dumpTABLE(connection,"");
+  //await dumpTRIGGERS(connection);
   let triggers = [
     `CREATE TRIGGER updateOSTimeUsed
       AFTER INSERT ON HasTags
@@ -70,7 +70,7 @@ async function run(connection){
       TagName VARCHAR(30) NOT NULL,
       TagDescription VARCHAR(30) NOT NULL,
       TagOS VARCHAR(30),
-      TagLenguage VARCHAR(30),
+      TagLanguage VARCHAR(30),
       TagType VARCHAR(30),
       TagTimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     )`,
@@ -86,6 +86,12 @@ async function run(connection){
       id INT PRIMARY KEY AUTO_INCREMENT,
       OSName VARCHAR(30) NOT NULL,
       OSDescription TEXT NOT NULL,
+      TimesUsed INT DEFAULT 0
+    )`,
+    `CREATE TABLE IF NOT EXISTS LanguageTag(
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      LanguageName VARCHAR(30) NOT NULL,
+      LanguageDescription TEXT NOT NULL,
       TimesUsed INT DEFAULT 0
     )`
     ];
