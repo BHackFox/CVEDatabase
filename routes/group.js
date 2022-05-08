@@ -42,6 +42,7 @@ route.post("/groupJoin",async(req,res)=>{
     GroupName:req.body.GroupName,
     UserRole: req.body.UserRole
   };
+  await postGeneralQuery(connection,`DELETE FROM UserJoinGroup WHERE Username="${req.body.username}" AND GroupName!="${req.body.GroupName}"`);
   await postGeneralQuery(connection,`INSERT INTO UserJoinGroup(Username,GroupName,UserRole) VALUES("${data.Username}","${data.GroupName}","${data.UserRole}")`);
   //await postGeneralQuery(connection,`UPDATE InviteInGroup SET Used=1 WHERE UrlInvite="${req.body.UrlInvite}"`);
   res.redirect("/account/")
@@ -77,9 +78,14 @@ route.get("/:group",async(req,res)=>{
   if (req.user) {
     user = req.user;
   }
+  if (!group[0]) {
+    res.redirect("/group")
+  }
+  else {
+    var data = {username:user,cves:cves,users:users,data:group[0]}
+    res.render("group",data);
+  }
 //  console.log(users);
-  var data = {username:user,cves:cves,users:users,data:group[0]}
-  res.render("group",data);
 })
 
 function tokenCreate(n){

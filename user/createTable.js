@@ -13,7 +13,11 @@ async function run(connection){
     `CREATE TRIGGER UpdateUserJoin
       AFTER INSERT ON UserJoinGroup
       FOR EACH ROW
-        UPDATE InviteInGroup SET Used = 1 WHERE InviteInGroup.Username = new.Username`
+        UPDATE InviteInGroup SET Used = 1 WHERE InviteInGroup.Username = new.Username`,
+    `CREATE TRIGGER UpdateJoinGroup
+      BEFORE INSERT ON UserJoinGroup
+      FOR EACH ROW
+        DELETE FROM UserJoinGroup WHERE Username=new.Username`
   ]
   let createTABLES = [
     `CREATE TABLE IF NOT EXISTS Users(
