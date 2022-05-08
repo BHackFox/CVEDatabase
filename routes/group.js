@@ -56,7 +56,6 @@ route.post("/invite",async(req,res)=>{
     UrlInvite: tokenCreate(20),
     UserRole: req.body.UserRole
   };
-  console.log(data);
   await postGeneralQuery(connection,`INSERT INTO InviteInGroup(Username,GroupName,InviteMember,UrlInvite,UserRole) VALUES("${data.Username}","${data.GroupName}","${data.InviteMember}","${data.UrlInvite}","${data.UserRole}")`);
   res.redirect("/account")
 })

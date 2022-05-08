@@ -74,13 +74,11 @@ route.get("/:CVE", async(req,res)=>{
   req.session.redirect = "/CVE/"+req.params.CVE;
   let data = await getGeneralQuery(connection,`SELECT * FROM CVE WHERE CVEName="${req.params.CVE}"`)
   let tags = await getGeneralQuery(connection,`SELECT HasTags.TagName,Tags.TagDescription FROM HasTags,Tags WHERE CVEName="${req.params.CVE}" AND HasTags.TagName=Tags.TagName`)
-  console.log(tags);
   if (data) {
     let user = false
     if (req.user){
       user = req.user;
     }
-    console.log(data);
     res.render("cve",{username:user,data:data[0],tags:tags})
   }
   else {
