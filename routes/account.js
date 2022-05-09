@@ -17,7 +17,7 @@ route.use(express.static('public'))
 route.get("/",async (req,res)=>{
   req.session.redirect = "/account/"
   let user = req.user;
-  let data = await getGeneralQuery(connection,`SELECT * FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate=Users.Username WHERE Username="${req.user.Username}" ORDER BY TimeCreation DESC`);
+  let data = await getGeneralQuery(connection,`SELECT * FROM (SELECT Users.Username,Email,Name,Surname,Mobile,Country,City,Address,Zip,Password FROM Users,Persona WHERE Users.Username=Persona.Username) AS t1 LEFT OUTER JOIN CVE ON CVE.CVEUserCreate=t1.Username WHERE t1.Username="${req.user.Username}" ORDER BY TimeCreation DESC`);
   let group = await getGeneralQuery(connection,`SELECT * FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.Username = "${req.user.Username}"`);
   let invites = await getGeneralQuery(connection,`SELECT GroupName,UserRole,UrlInvite FROM InviteInGroup WHERE Username="${req.user.Username}" AND Used=0`);
   res.render("account",{username:user,data:data[0],cves:data,group:group[0],invites:invites})

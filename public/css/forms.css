@@ -108,12 +108,34 @@ textarea{
     position: relative;
 }
 
+
 .popup-content #close{
   position: absolute;
   bottom: 0px;
   right: 0px;
 }
 .popup-content #post{
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
+.popup-content-large{
+    height: 450px;
+    width: 800px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+}
+
+
+.popup-content-large #close{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+.popup-content-large #post{
   position: absolute;
   bottom: 0px;
   left: 0px;

@@ -62,6 +62,7 @@ route.post("/newcve",checkAuthenticated,async (req,res)=>{
   if (number_of_cve[0].N_CVE > 0){
     lol = lol + "-"+String(number_of_cve[0].N_CVE+1);
   }
+  //console.log(req.user.Username+" $$ "+lol);
   postGeneralQuery(connection,`INSERT INTO CVE(CVEName, CVETitle, CVEDescription, CVEUserCreate) VALUES("${lol}","${req.body.CVETitle}","${req.body.CVEDescription}","${req.user.Username}")`)
   for (var i = 0; i < req.body.tags.length; i++) {
     postGeneralQuery(connection,`INSERT INTO HasTags(TagName,CVEName,Username) VALUES("${req.body.tags[i]}","${lol}","${req.user.Username}")`)
