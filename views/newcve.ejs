@@ -75,25 +75,32 @@
     function postCVE() {
       let title = document.getElementById("title");
       let desc = document.getElementById("desc");
-      fetch("/cve/newCVE",{
-        method:'POST',
-        headers:{
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body:JSON.stringify({
-          'CVETitle':title.value,
-          'CVEDescription':desc.value,
-          'tags':selected
-        }),
-        redirect: "follow"
-      })
-      .then(response =>{
-        console.log(response);
-        if (response.redirected) {
+      if (!title.value || !desc.value) {
+        var text = document.createElement('div');
+        text.innerHTML = "<h4>Must be filled</h4>";
+        desc.appendChild(text);
+      }
+      else{
+        fetch("/cve/newCVE",{
+          method:'POST',
+          headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body:JSON.stringify({
+            'CVETitle':title.value,
+            'CVEDescription':desc.value,
+            'tags':selected
+          }),
+          redirect: "follow"
+        })
+        .then(response =>{
+          console.log(response);
+          if (response.redirected) {
             window.location.href = response.url;
-        }
-      })
+          }
+        })
+      }
     }
 
   </script>
