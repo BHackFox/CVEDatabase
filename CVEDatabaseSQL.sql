@@ -217,3 +217,12 @@ CREATE TRIGGER eventListenerInvite
   AFTER INSERT ON InviteInGroup
   FOR EACH ROW
     INSERT INTO GroupEvents(EventType,EventDescription,EventUser) VALUES("INVITE",new.Username,new.InviteMember);
+
+
+DROP TRIGGER IF EXISTS eventListener;
+
+CREATE TRIGGER eventListener
+  AFTER INSERT ON eventListener
+  FOR EACH ROW
+    IF (SELECT SUM(NUM) AS Sum_Users FROM (SELECT Grps.GroupName,Username FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName HAVING (t1.GroupName=(SELECT GroupName FROM Users,UserJoinGroup WHERE Users.Username=new.EventUser AND UserJoinGroup.Username=Users.Username))==10)
+      INSERT INTO HasBadge(BadgeName,GroupName) VALUES("10CVE",SELECT GroupName FROM Users,UserJoinGroup WHERE Users.Username=new.EventUser AND UserJoinGroup.Username=Users.Username);
