@@ -4,6 +4,7 @@ const getUser = require('../mysql/GET/getUser');
 const getGeneralQuery = require('../mysql/GET/getGeneralQuery');
 const postGeneralQuery = require('../mysql/POST/postGeneralQuery');
 const mysql = require('mysql');
+const socket = require('socket.io');
 var bodyParser = require('body-parser');
 var connection = mysql.createConnection({
     host: "localhost",

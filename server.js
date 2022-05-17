@@ -178,6 +178,7 @@ app.use("/CVE",cve);
 app.use("/user",user);
 app.use("/api",api);
 app.use("/tag",tag);
+app.use("/chat",tag);
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){
