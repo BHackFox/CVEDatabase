@@ -12,6 +12,7 @@ var connection = mysql.createConnection({
     password: "fede",
     database: "CVEDatabase",
 });
+
 route.use(express.static('public'));
 route.use(bodyParser.urlencoded({
     extended: true
@@ -19,16 +20,17 @@ route.use(bodyParser.urlencoded({
 route.use(bodyParser.json());
 route.use(express.json());
 
+route.get("/",(req,res)=>{
+  req.session.redirect = "/chat";
 
-route.get("/",checkAuthenticated,async(req,res)=>{
-  res.json(req.user);
+  res.render("chat",{username:req.user});
 });
 
 // socket.io instance
 
-function checkAuthenticated(req,res,next){
-  if(req.isAuthenticated()){
-    return next()
-  }
-  res.redirect('/login')
-}
+
+
+
+
+
+module.exports = route;

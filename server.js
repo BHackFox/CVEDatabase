@@ -16,6 +16,11 @@ var connection = mysql.createConnection({
     password: "fede",
     database: "CVEDatabase",
 });
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
 const infoLogin = require('./user/info-login');
 const createTable = require('./user/createTable');
 const insertUser = require('./mysql/POST/insertUser');
@@ -25,8 +30,9 @@ const cve = require('./routes/cve');
 const user = require('./routes/user');
 const api = require('./routes/api');
 const tag = require('./routes/tag');
+const chat = require('./routes/chat');
 const getGeneralQuery = require('./mysql/GET/getGeneralQuery');
-
+const postGeneralQuery = require('./mysql/POST/postGeneralQuery')
 initializePassport(passport,
   async username => await infoLogin(connection,`SELECT Password,id FROM Users WHERE Username = "${username}"`),
   async id => await infoLogin(connection,`SELECT Username,Email FROM Users WHERE id = "${id}"`)
@@ -56,6 +62,10 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
 
+app.use(function(req,res,next){
+    req.io = io;
+    next();
+});
 
 app.get("/",async (req,res)=>{
   req.session.error = "";
@@ -118,7 +128,7 @@ app.post('/login',passport.authenticate('local',{
   failureFlash: true
 }),(req,res)=>{
   if (!req.session.redirect) {
-    res.redirect("/account")
+    res.redirect("/chat")
   }
   else {
     res.redirect(req.session.redirect)
@@ -171,14 +181,42 @@ app.get('/minecraft',(req,res)=>{
   res.json({ip:"84.221.10.247",port:25565})
 })
 
-app.use("/account",checkAuthenticated,account);
+var allClients = {};
 
+
+io.sockets.on('connection', async (socket) => {
+  allClients[socket.id] = socket;
+  //var group = await getGeneralQuery(connection,``);
+  socket.on('disconnect',function(){
+      console.log("User "+socket.id+" disconnect");
+      //req.io.emit('chat message',{user:allClients[ind].user,value:"DISCONNECT",time:0})
+      //allClients.splice(ind,1);
+      //socket.leave("chat message");
+      delete allClients[socket.id];
+  })
+
+  socket.on('online',()=>{
+    io.emit('online',Object.keys(allClients).length);
+  })
+
+  socket.on('chat message',async(msg) => {
+    console.log("AOOO");
+    await postGeneralQuery(connection,`INSERT INTO Messages(Username,GroupName,TextContent) SELECT "${msg.user}", GroupName, "${msg.value}" FROM UserJoinGroup WHERE Username="${msg.user}"`);
+    for (var i in allClients) {
+
+      io.to(i).emit('chat message',{user:msg.user,value:msg.value,time:msg.time})
+    }
+    //req.io.emit('chat message', {user:msg.user,value:msg.value,time:msg.time});
+  });
+});
+
+app.use("/account",checkAuthenticated,account);
 app.use("/group",group);
 app.use("/CVE",cve);
 app.use("/user",user);
 app.use("/api",api);
 app.use("/tag",tag);
-app.use("/chat",tag);
+app.use("/chat",checkAuthenticated,chat);
 
 function checkNotAuthenticated(req,res,next){
   if(req.isAuthenticated()){
@@ -193,5 +231,4 @@ function checkAuthenticated(req,res,next){
   res.redirect('/login')
 }
 
-
-app.listen(process.env.PORT || 3000)
+server.listen(process.env.PORT || 3000)
