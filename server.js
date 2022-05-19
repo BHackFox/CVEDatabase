@@ -128,7 +128,7 @@ app.post('/login',passport.authenticate('local',{
   failureFlash: true
 }),(req,res)=>{
   if (!req.session.redirect) {
-    res.redirect("/chat")
+    res.redirect("/")
   }
   else {
     res.redirect(req.session.redirect)
@@ -186,19 +186,14 @@ var allClients = {};
 
 io.sockets.on('connection', async (socket) => {
   allClients[socket.id] = {socket:socket,username:"",group:""};
-  //var group = await getGeneralQuery(connection,``);
   socket.on('disconnect',function(){
       console.log("User "+socket.id+" disconnect");
-      //req.io.emit('chat message',{user:allClients[ind].user,value:"DISCONNECT",time:0})
-      //allClients.splice(ind,1);
-      //socket.leave("chat message");
       delete allClients[socket.id];
   });
 
   socket.on('register',(data)=>{
     allClients[socket.id].username = data.username;
     allClients[socket.id].group = data.group;
-    //console.log(allClients[socket.id]);
   });
 
   socket.emit('online',Object.keys(allClients).length);
@@ -210,13 +205,10 @@ io.sockets.on('connection', async (socket) => {
         io.to(allClients[i].socket.id).emit('group',{user:msg.user,value:msg.value,time:msg.time})
       }
     }
-    //req.io.emit('chat message', {user:msg.user,value:msg.value,time:msg.time});
   });
 
   socket.on('global',(msg) => {
-    //await postGeneralQuery(connection,`INSERT INTO Messages(Username,TextContent) VALUES("${msg.user}", "${msg.value}")`);
     io.emit('global',{user:msg.user,value:msg.value,time:msg.time})
-    //req.io.emit('chat message', {user:msg.user,value:msg.value,time:msg.time});
   });
 });
 

@@ -30,8 +30,13 @@ route.get("/",(req,res)=>{
 route.get("/group",async (req,res)=>{
   req.session.redirect = "/chat/group";
   let group = await getGeneralQuery(connection,`SELECT GroupName FROM UserJoinGroup WHERE Username="${req.user.Username}"`)
-  let messages = await getGeneralQuery(connection,`SELECT * FROM MessagesGroup WHERE GroupName="${group[0].GroupName}" ORDER BY TimeText`);
-  res.render("chatgroup",{username:req.user,group:group[0].GroupName,messages:messages});
+  if (group[0].GroupName) {
+    let messages = await getGeneralQuery(connection,`SELECT * FROM MessagesGroup WHERE GroupName="${group[0].GroupName}" ORDER BY TimeText`);
+    res.render("chatgroup",{username:req.user,group:group[0].GroupName,messages:messages});
+  }
+  else {
+    res.redirect("/account")
+  }
 });
 
 
