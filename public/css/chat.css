@@ -20,12 +20,18 @@
 
 .time-right {
   float: right;
-  color: #aaa;
+  color: #640000;
 }
 
 .time-left {
   float: left;
-  color: #999;
+  color: #640000;
+}
+.search-bottom{
+  position: fixed;
+  bottom: 90px;
+  left: 0;
+  width: 100%;
 }
 
 h5 .right{

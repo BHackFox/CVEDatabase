@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CVE Global Chat</title>
+    <title>CVE Group Chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/dropdown.css" />
     <link rel="stylesheet" type="text/css" href="css/footer.css" />
@@ -32,7 +32,20 @@
 
     </div>
     <div id="messages">
-
+      <%for(var i=0;i<messages.length;i++){%>
+        <div>
+          <%if(messages[i].Username===username.Username){%>
+          <div class="container darker">
+          <%}%>
+          <%if(messages[i].Username!==username.Username){%>
+          <div class="container">
+          <%}%>
+          <% var a = new Date(messages[i].TimeText);var year = a.getYear()-100; month = a.getMonth()+1;var date = a.getDate();var hour = a.getHours();var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds(); var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;%>
+            <h5 class="right"><%=messages[i].Username%>: <%=messages[i].TextContent%></h5>
+            <span class="time-right"><%=time%></span>
+          </div>
+        </div>
+      <%}%>
     </div>
     <form id="form" action="" class="search-bottom">
       <input id="input" type="search" name="search" placeholder="Send message" autocomplete="off"/><button>Send</button>
@@ -40,6 +53,11 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
+      function toBottom()
+      {
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+      window.onload=toBottom;
       var socket = io({transports: ['websocket'], upgrade: false});
 
       var messages = document.getElementById('messages');
@@ -49,17 +67,12 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit('global', {user:"<%=username.Username %>",value:input.value,time: Date.now()});
+          socket.emit('group', {user:"<%=username.Username %>",value:input.value,time: Date.now()});
           input.value = '';
         }
       });
-      socket.on('online',function(n){
-      //  socket.emit('counter');
-        $("#online").text("Online: "+n);
-      })
-      socket.on('global', function(msg) {
-
-        var item = document.createElement('div');
+      socket.emit('register',{username:"<%=username.Username %>",group:"<%=group %>"})
+      socket.on('group', function(msg) {
         var item = document.createElement('div');
         var a = new Date(msg.time);
         var year = a.getYear()-100;
@@ -69,6 +82,7 @@
         var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
         var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
         var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec;
+
         if (msg.user === "<%=username.Username %>") {
           item.innerHTML = '<div class="container darker"><h5 class="right">'+msg.user+': '+msg.value+'</h5><span class="time-right">'+time+'</span></div>';
         }

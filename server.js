@@ -185,7 +185,7 @@ var allClients = {};
 
 
 io.sockets.on('connection', async (socket) => {
-  allClients[socket.id] = socket;
+  allClients[socket.id] = {socket:socket,username:"",group:""};
   //var group = await getGeneralQuery(connection,``);
   socket.on('disconnect',function(){
       console.log("User "+socket.id+" disconnect");
@@ -193,19 +193,29 @@ io.sockets.on('connection', async (socket) => {
       //allClients.splice(ind,1);
       //socket.leave("chat message");
       delete allClients[socket.id];
-  })
+  });
 
-  socket.on('online',()=>{
-    io.emit('online',Object.keys(allClients).length);
-  })
+  socket.on('register',(data)=>{
+    allClients[socket.id].username = data.username;
+    allClients[socket.id].group = data.group;
+    //console.log(allClients[socket.id]);
+  });
 
-  socket.on('chat message',async(msg) => {
-    console.log("AOOO");
-    await postGeneralQuery(connection,`INSERT INTO Messages(Username,GroupName,TextContent) SELECT "${msg.user}", GroupName, "${msg.value}" FROM UserJoinGroup WHERE Username="${msg.user}"`);
+  socket.emit('online',Object.keys(allClients).length);
+
+  socket.on('group',async(msg) => {
+    await postGeneralQuery(connection,`INSERT INTO MessagesGroup(Username,GroupName,TextContent) SELECT "${msg.user}", GroupName, "${msg.value}" FROM UserJoinGroup WHERE Username="${msg.user}"`);
     for (var i in allClients) {
-
-      io.to(i).emit('chat message',{user:msg.user,value:msg.value,time:msg.time})
+      if (allClients[i].group === allClients[socket.id].group){
+        io.to(allClients[i].socket.id).emit('group',{user:msg.user,value:msg.value,time:msg.time})
+      }
     }
+    //req.io.emit('chat message', {user:msg.user,value:msg.value,time:msg.time});
+  });
+
+  socket.on('global',(msg) => {
+    //await postGeneralQuery(connection,`INSERT INTO Messages(Username,TextContent) VALUES("${msg.user}", "${msg.value}")`);
+    io.emit('global',{user:msg.user,value:msg.value,time:msg.time})
     //req.io.emit('chat message', {user:msg.user,value:msg.value,time:msg.time});
   });
 });
