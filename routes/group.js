@@ -74,6 +74,8 @@ route.get("/:group",async(req,res)=>{
     lim = "";
   }
   let cves = await getGeneralQuery(connection,`SELECT * FROM Grps,UserJoinGroup,(SELECT Users.Username,CVE.CVEName,CVE.TimeCreation FROM Users,CVE WHERE Users.Username = CVE.CVEUserCreate ORDER BY CVE.TimeCreation DESC) AS t1 WHERE t1.Username = UserJoinGroup.Username AND UserJoinGroup.GroupName = Grps.GroupName AND Grps.GroupName = "${req.params.group}" ORDER BY t1.TimeCreation DESC ${lim}`)
+
+  let badges = await getGeneralQuery(connection,`SELECT * FROM (SELECT COUNT(Badges.BadgeName) AS CB,Badges.BadgeName FROM Badges,HasBadge WHERE HasBadge.GroupName = "${req.params.group}" AND HasBadge.BadgeName = Badges.BadgeName GROUP BY BadgeName) AS t1, Badges WHERE t1.BadgeName = Badges.BadgeName`)
   let user = false;
   if (req.user) {
     user = req.user;
@@ -82,7 +84,7 @@ route.get("/:group",async(req,res)=>{
     res.redirect("/group")
   }
   else {
-    var data = {username:user,cves:cves,users:users,data:group[0]}
+    var data = {username:user,cves:cves,users:users,data:group[0],badges:badges}
     res.render("group",data);
   }
 //  console.log(users);

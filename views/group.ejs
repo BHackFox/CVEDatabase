@@ -60,6 +60,16 @@
 		<td valign="top" class="ltgreybackground">
 			<div class="larger"><a href="/group/<%data.GroupName%>" target="_blank">About <%=data.GroupName%> Group</a></div>
 		</td>
+    <td >
+      <div style="position:absolute;" class="row">
+        <%for(var i=0;i<badges.length;i++){%>
+          <div class="row">
+            <h5><%= badges[i].CB%></h5>
+            <img class="zoom" src="<%= badges[i].BadgePosition%>" width="40" height="40">
+          </div>
+        <%}%>
+      </div>
+    </td>
 	</tr>
   <tr>
     <th nowrap="nowrap" align="center" valign="top">Description</th>

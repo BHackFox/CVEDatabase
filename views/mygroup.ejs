@@ -53,6 +53,16 @@
           <td valign="top" class="ltgreybackground">
             <div class="larger"><a href="/group/<%data.GroupName%>" target="_blank">About <%=data.GroupName%> Group</a></div>
           </td>
+          <td >
+            <div style="position:absolute;" class="row">
+              <%for(var i=0;i<badges.length;i++){%>
+                <div class="row">
+                  <h5><%= badges[i].CB%></h5>
+                  <img class="zoom" src="<%= badges[i].BadgePosition%>" width="40" height="40">
+                </div>
+              <%}%>
+            </div>
+          </td>
         </tr>
         <tr>
           <th nowrap="nowrap" align="center" valign="top">Description</th>
@@ -139,6 +149,24 @@
           </form>
         </td>
       </table>
+      <div>
+        <table id="table">
+          <tr>
+            <td>Event Type</td>
+            <td>Event Description</td>
+            <td>Event User</td>
+            <td>Event Time</td>
+          </tr>
+        <%for(var i=0;i<events.length;i++){%>
+          <tr>
+            <td><%=events[i].EventType%></td>
+            <td><%=events[i].EventDescription%></td>
+            <td><a href="/user/<%=events[i].EventUser%>"><%=events[i].EventUser%></a></td>
+            <td><%=events[i].EventTime%></td>
+          </tr>
+        <%}%>
+        </table>
+      </div>
     </div>
     <div class="footer">
       <div class="inner">

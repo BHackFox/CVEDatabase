@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="css/topnav.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/generatedTable.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
   <body>
     <div class="topnav">
@@ -31,6 +34,14 @@
           </div>
           <%}%>
         </div>
+    <%if(username.Username === data.CVEUserCreate){ %>
+    <div>
+      <form action="/CVE/deleteCVE" method="post">
+        <button type="submit" name="button" value="<%=data.CVEName%>"><i style="color:red;"class='material-icons'>delete_outline</i></button>
+
+      </form>
+    </div>
+    <%}%>
     <div id="GeneratedTable">
       <table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr>

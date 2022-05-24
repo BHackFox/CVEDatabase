@@ -168,6 +168,15 @@ CREATE TABLE IF NOT EXISTS Badges(
   BadgeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("1CVE","CVE","/images/1CVE.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("10CVE","CVE","/images/10CVE.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("10MB","Group","/images/10MB.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("20MB","Group","/images/20MB.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("CVEMaster","CVE","/images/CVEMaster.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("1place","Race","/images/1place.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("2palce","Race","/images/2place.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("3place","Race","/images/3place.png");
+
 
 DROP TABLE IF EXISTS HasBadge;
 
@@ -239,10 +248,17 @@ CREATE TRIGGER eventListenerInvite
     INSERT INTO GroupEvents(EventType,EventDescription,EventUser) VALUES("INVITE",new.Username,new.InviteMember);
 
 
-DROP TRIGGER IF EXISTS eventListener;
+DROP TRIGGER IF EXISTS eventListenerCVEDelete;
 
-CREATE TRIGGER eventListener
-  AFTER INSERT ON eventListener
+CREATE TRIGGER eventListenerCVEDelete
+  AFTER DELETE ON CVE
   FOR EACH ROW
-    IF (SELECT SUM(NUM) AS Sum_Users FROM (SELECT Grps.GroupName,Username FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName HAVING (t1.GroupName=(SELECT GroupName FROM Users,UserJoinGroup WHERE Users.Username=new.EventUser AND UserJoinGroup.Username=Users.Username))==10)
-      INSERT INTO HasBadge(BadgeName,GroupName) VALUES("10CVE",SELECT GroupName FROM Users,UserJoinGroup WHERE Users.Username=new.EventUser AND UserJoinGroup.Username=Users.Username);
+    INSERT INTO GroupEvents(EventType,EventDescription,EventUser) VALUES("CVE","A CVE Was Deleted",old.CVEUserCreate);
+
+-- DROP TRIGGER IF EXISTS badgeListenerCVE;
+--
+-- CREATE TRIGGER badgeListenerCVE
+--   AFTER INSERT ON CVE
+--   FOR EACH ROW BEGIN
+--     IF((SELECT SUM(NUM) AS Sum_Users FROM (SELECT Grps.GroupName,Username FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.Username = NEW.CVEUserCreate) AS t1 LEFT OUTER JOIN CVE AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName) > 9) THEN
+--       INSERT INTO HasBadge(BadgeName,GroupName) VALUES ;
