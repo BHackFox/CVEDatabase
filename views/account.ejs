@@ -15,6 +15,19 @@
 
   </head>
   <script type="text/javascript">
+  function postPremium() {
+    let card = document.getElementById("card")
+    fetch("/api/premium",{
+      method:'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        'card':card.value
+      })
+    })
+  }
   function postPersona() {
     let name = document.getElementById("newName")
     let surname = document.getElementById("newSurname")
@@ -106,14 +119,16 @@
         <div class="larger"><a href="/group/<%= group ? group.GroupName : ""%>"><%= group ? group.GroupName : "..."%></a></div>
       </td>
     </tr>
-    <tr>
-      <td nowrap="nowrap" align="left" valign="top">
-        <form action="/group/createGroup" method="post">
-          <input type="text" name="GroupName" placeholder="Group Name ...">
-          <button type="submit" name="button">Create Group</button>
-        </form>
-      </td>
-    </tr>
+    <%if(premium && !group){%>
+      <tr>
+        <td nowrap="nowrap" align="left" valign="top">
+          <form action="/group/createGroup" method="post">
+            <input type="text" name="GroupName" placeholder="Group Name ...">
+            <button type="submit" name="button">Create Group</button>
+          </form>
+        </td>
+      </tr>
+    <%}%>
     <tr>
       <th colspan="2">Invites</th>
     </tr>
@@ -155,6 +170,11 @@
   <form action="/account/newCVE" method="get">
     <button type="submit">New CVE</button>
   </form>
+  <%if(!premium){%>
+    <div>
+      <button type="button" id="openPopup" onclick="openFormPremium();">Go Premium</button>
+    </div>
+  <%}%>
     </div>
   </div>
   <div>
@@ -184,6 +204,19 @@
       </div>
     </div>
   </div>
+  <div>
+    <div class="popup" id="premium">
+      <div class="popup-content-large">
+        <div class="title">
+          <h1>Go Premium</h1>
+        </div>
+        <div class="row">
+          <input type="form" id="card" placeholder="Add your card">
+          <button type="button" id="post" onclick="postPremium();closeForm();" style="bottom:0px;">Update</button>
+          <button type="button" id="close" onclick="closeForm();">Close</button>
+      </div>
+    </div>
+  </div>
     <div class="footer">
       <div class="inner">
         <div class="flex">
@@ -201,9 +234,15 @@
     function openForm(){
       document.getElementById("popup").style.display = "flex";
     }
+    function openFormPremium(){
+      document.getElementById("premium").style.display = "flex";
+    }
 
     function closeForm(pop) {
         $(".popup").fadeOut();
+    }
+    function closeFormPremium(pop) {
+        $(".premium").fadeOut();
     }
   </script>
 </html>

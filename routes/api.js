@@ -75,6 +75,10 @@ route.post("/tags/newtag", checkAuthenticated,async(req,res)=>{
   res.json({response:true})
 })
 
+route.post("/premium",checkAuthenticated,async(req,res)=>{
+  await postGeneralQuery(connection,`INSERT INTO UserPremium(Username,Card) VALUES("${req.user.Username}","${req.body.card}")`);
+  res.redirect("/account");
+})
 
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){

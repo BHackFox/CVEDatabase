@@ -20,7 +20,8 @@ route.get("/",async (req,res)=>{
   let data = await getGeneralQuery(connection,`SELECT * FROM (SELECT Users.Username,Email,Name,Surname,Mobile,Country,City,Address,Zip,Password FROM Users,Persona WHERE Users.Username=Persona.Username) AS t1 LEFT OUTER JOIN CVE ON CVE.CVEUserCreate=t1.Username WHERE t1.Username="${req.user.Username}" ORDER BY TimeCreation DESC`);
   let group = await getGeneralQuery(connection,`SELECT * FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.Username = "${req.user.Username}"`);
   let invites = await getGeneralQuery(connection,`SELECT GroupName,UserRole,UrlInvite FROM InviteInGroup WHERE Username="${req.user.Username}" AND Used=0`);
-  res.render("account",{username:user,data:data[0],cves:data,group:group[0],invites:invites})
+  let ver = await getGeneralQuery(connection,`SELECT * FROM UserPremium WHERE Username="${req.user.Username}"`);
+  res.render("account",{username:user,data:data[0],cves:data,group:group[0],invites:invites,premium:ver[0]})
 })
 
 route.get("/group",async(req,res)=>{
@@ -42,6 +43,10 @@ route.get("/group",async(req,res)=>{
   res.render("mygroup",{username:user,data:group[0],users:users,cves:cves,badges:badges,events:events})
 })
 
+route.post("/leaveGroup",async(req,res)=>{
+  await postGeneralQuery(connection,`DELETE FROM UserJoinGroup WHERE Username = "${req.user.Username}"`);
+  res.redirect("/account");
+})
 
 route.get("/newCVE",async(req,res)=>{
   let user = req.user;

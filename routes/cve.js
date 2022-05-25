@@ -82,7 +82,13 @@ route.post("/newcve",checkAuthenticated,async (req,res)=>{
 
 route.post("/deleteCVE",checkAuthenticated,async(req,res)=>{
   postGeneralQuery(connection,`DELETE FROM CVE WHERE CVEName = "${req.body.button}"`)
+  postGeneralQuery(connection,`DELETE FROM HasTags WHERE CVEName = "${req.body.button}"`)
   res.redirect("/CVE/")
+})
+
+route.post("/verifyCVE",checkAuthenticated,async(req,res)=>{
+  postGeneralQuery(connection,`UPDATE CVE SET CVEConfermation=1 WHERE CVEName = "${req.body.button}"`)
+  res.redirect("/CVE/"+req.body.button)
 })
 
 route.get("/:CVE", async(req,res)=>{
@@ -93,8 +99,9 @@ route.get("/:CVE", async(req,res)=>{
   if (data) {
     let user = false
     if (req.user){
-      ver = await getGeneralQuery(connection,`SELECT * FROM UserPremium WHERE Username="${req.user.username}"`)
+      ver = await getGeneralQuery(connection,`SELECT * FROM UserPremium WHERE Username="${req.user.Username}"`)
       user = req.user;
+      console.log(ver);
     }
     res.render("cve",{username:user,data:data[0],tags:tags,premium:ver[0]})
   }

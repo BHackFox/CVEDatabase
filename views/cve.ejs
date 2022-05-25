@@ -101,6 +101,23 @@
       </div>
     </td>
   </tr>
+  <tr>
+    <th>Verified</th>
+  </tr>
+  <tr>
+    <td>
+      <% var html1 = "<i class='material-icons' style='color:#96b365'>done_outline</i>"
+      var html2 = "<i class='material-icons' style='color:#ff0000'>close</i>"%>
+      <%-data.CVEConfermation==1 ? html1 : html2%>
+    </td>
+    <%if(premium){%>
+      <td>
+        <form action="/CVE/verifyCVE" method="post">
+          <button type="submit" name="button" value="<%=data.CVEName%>">Verify CVE</button>
+        </form>
+      </td>
+    <%}%>
+  </tr>
     </div>
     <div class="footer">
       <div class="inner">
