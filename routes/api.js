@@ -20,7 +20,7 @@ route.use(bodyParser.json());
 route.use(express.json());
 route.get("/user/:user",async (req,res)=>{
   let user = req.params.user;
-  let data = await getGeneralQuery(connection,`SELECT Email,Name,Surname FROM Users,Persona WHERE Users.Username=Persona.Username AND Users.Username = "${user}"`);
+  let data = await getGeneralQuery(connection,`SELECT * FROM PersonaData WHERE Username = "${user}"`);
   res.json(data[0]);
 })
 

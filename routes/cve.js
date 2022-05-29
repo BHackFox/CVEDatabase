@@ -18,9 +18,13 @@ route.get("/",async (req,res)=>{
   let n = 0;
   let search = ""
   let qs = ""
+  let cert = ""
   if (req.query.search){
     qs = '?search='+req.query.search
     search = 'AND (CVEName LIKE "%'+req.query.search+'%" OR CVETitle LIKE "%'+req.query.search+'%")'
+  }
+  if (req.query.cert == 1) {
+    cert = 'AND CVE.CVEName IN CVEVerified';
   }
   if (req.query.row<=0) {
     res.redirect("/CVE/"+qs)
@@ -29,7 +33,7 @@ route.get("/",async (req,res)=>{
     if (req.query.row){
       n = req.query.row;
     }
-    var query = `SELECT CVE.CVEName,CVE.CVEUserCreate,CVE.TimeCreation,CVE.CVEConfermation,CVE.CVETitle,CVE.CVEDescription FROM CVE WHERE (CVE.id>(SELECT MAX(CVE.id) FROM CVE)-${n+20} AND CVE.id<=(SELECT MAX(CVE.id) FROM CVE)-${n} ${search}) ORDER BY TimeCreation DESC`
+    var query = `SELECT CVE.CVEName,CVE.CVEUserCreate,CVE.TimeCreation,CVE.CVEConfirmation,CVE.CVETitle,CVE.CVEDescription FROM CVE WHERE (CVE.id>(SELECT MAX(CVE.id) FROM CVE)-${n+20} AND CVE.id<=(SELECT MAX(CVE.id) FROM CVE)-${n} ${search} ${cert}) ORDER BY TimeCreation DESC`
     let data = await getGeneralQuery(connection,query)
     //console.log(data1);
     for (var i = 0; i < data.length; i++) {
@@ -77,6 +81,9 @@ route.post("/newcve",checkAuthenticated,async (req,res)=>{
   if (data1[0] && data1[0].Sum_Users===10){
     postGeneralQuery(connection,`INSERT INTO HasBadge(BadgeName,GroupName) VALUES ("10CVE","${data1[0].GroupName}")`);
   }
+  if (data1[0] && data1[0].Sum_Users===100){
+    postGeneralQuery(connection,`INSERT INTO HasBadge(BadgeName,GroupName) VALUES ("CVEMaster","${data1[0].GroupName}")`);
+  }
   res.redirect("/CVE/"+lol);
 })
 
@@ -87,14 +94,14 @@ route.post("/deleteCVE",checkAuthenticated,async(req,res)=>{
 })
 
 route.post("/verifyCVE",checkAuthenticated,async(req,res)=>{
-  postGeneralQuery(connection,`UPDATE CVE SET CVEConfermation=1 WHERE CVEName = "${req.body.button}"`)
+  postGeneralQuery(connection,`UPDATE CVE SET CVEConfirmation=1 WHERE CVEName = "${req.body.button}"`)
   res.redirect("/CVE/"+req.body.button)
 })
 
 route.get("/:CVE", async(req,res)=>{
   req.session.redirect = "/CVE/"+req.params.CVE;
   let data = await getGeneralQuery(connection,`SELECT * FROM CVE WHERE CVEName="${req.params.CVE}"`);
-  let tags = await getGeneralQuery(connection,`SELECT HasTags.TagName,Tags.TagDescription FROM HasTags,Tags WHERE CVEName="${req.params.CVE}" AND HasTags.TagName=Tags.TagName`);
+  let tags = await getGeneralQuery(connection,`SELECT TagName,TagDescription FROM CVETags WHERE CVEName="${req.params.CVE}"`);
   let ver = [null];
   if (data) {
     let user = false

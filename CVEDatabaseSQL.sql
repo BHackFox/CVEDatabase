@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS CVE(
   CVETitle VARCHAR(64) NOT NULL,
   CVEDescription TEXT NOT NULL,
   CVEUserCreate VARCHAR(30) NOT NULL,
-  CVEConfermation BOOLEAN DEFAULT FALSE,
+  CVEConfirmation BOOLEAN DEFAULT FALSE,
   TimeCreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -174,7 +174,7 @@ INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("10MB","Group","/im
 INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("20MB","Group","/images/20MB.png");
 INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("CVEMaster","CVE","/images/CVEMaster.png");
 INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("1place","Race","/images/1place.png");
-INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("2palce","Race","/images/2place.png");
+INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("2place","Race","/images/2place.png");
 INSERT INTO Badges(BadgeName,BadgeType,BadgePosition) VALUES("3place","Race","/images/3place.png");
 
 
@@ -255,10 +255,48 @@ CREATE TRIGGER eventListenerCVEDelete
   FOR EACH ROW
     INSERT INTO GroupEvents(EventType,EventDescription,EventUser) VALUES("CVE","A CVE Was Deleted",old.CVEUserCreate);
 
--- DROP TRIGGER IF EXISTS badgeListenerCVE;
---
--- CREATE TRIGGER badgeListenerCVE
---   AFTER INSERT ON CVE
---   FOR EACH ROW BEGIN
---     IF((SELECT SUM(NUM) AS Sum_Users FROM (SELECT Grps.GroupName,Username FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.Username = NEW.CVEUserCreate) AS t1 LEFT OUTER JOIN CVE AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName) > 9) THEN
---       INSERT INTO HasBadge(BadgeName,GroupName) VALUES ;
+
+CREATE OR REPLACE VIEW CVEVerified AS
+  SELECT * FROM CVE WHERE CVEConfirmation = 1;
+
+CREATE OR REPLACE VIEW PersonaData AS
+  SELECT Email,Name,Surname FROM Users,Persona WHERE Users.Username=Persona.Username;
+
+CREATE OR REPLACE VIEW UserGroup AS
+  SELECT GroupName,Users.Username FROM UserJoinGroup,Users WHERE Users.Username=UserJoinGroup.Username;
+
+CREATE OR REPLACE VIEW CVETags AS
+  SELECT HasTags.TagName,Tags.TagDescription,HasTags.CVEName FROM HasTags,Tags WHERE HasTags.TagName=Tags.TagName;
+
+CREATE OR REPLACE VIEW TagLocal AS
+  SELECT COUNT(*) AS S_TagLocal FROM Tags WHERE TagType="Local";
+
+CREATE OR REPLACE VIEW TagRemote AS
+  SELECT COUNT(*) AS S_TagRemote FROM Tags WHERE TagType="Remote";
+
+CREATE OR REPLACE VIEW NumLang AS
+  SELECT COUNT(*) AS S_Lan,LanguageName FROM Tags,LanguageTag WHERE LanguageName=TagLanguage;
+
+CREATE OR REPLACE VIEW NumOS AS
+  SELECT COUNT(*) AS S_OS,OSName FROM Tags,OSTag WHERE OSName=TagOS;
+
+CREATE OR REPLACE VIEW NumCVE AS
+  SELECT COUNT(*) AS S_CVE FROM CVE;
+
+CREATE OR REPLACE VIEW NumCVEVer AS
+  SELECT COUNT(*) AS S_CVEVer FROM CVE WHERE CVEConfirmation=1;
+
+CREATE OR REPLACE VIEW NumUsers AS
+  SELECT COUNT(*) AS S_Users FROM Users;
+
+CREATE OR REPLACE VIEW NumGroups AS
+  SELECT COUNT(*) AS S_Groups FROM Grps;
+
+CREATE OR REPLACE VIEW NumPremium AS
+  SELECT COUNT(*) AS S_Premium FROM UserPremium;
+
+CREATE OR REPLACE VIEW HasBadgeMaster AS
+  SELECT Grps.GroupName FROM Grps,HasBadge WHERE HasBadge.GroupName = Grps.GroupName AND BadgeName = "CVEMaster";
+
+CREATE OR REPLACE VIEW HasBadgeFirst AS
+  SELECT Grps.GroupName FROM Grps,HasBadge WHERE HasBadge.GroupName = Grps.GroupName AND BadgeName = "1place";

@@ -26,6 +26,11 @@ route.get("/",async (req,res)=>{
 
 route.get("/group",async(req,res)=>{
   let user = req.user;
+  let findGroup = await getGeneralQuery(connection,`SELECT GroupName FROM UserGroup WHERE Username="${user.Username}"`)
+  if (!findGroup[0]) {
+    res.redirect("/account")
+  }
+  req.session.redirect = "/account/"
   let group = await getGeneralQuery(connection,`SELECT SUM(NUM) AS Sum_Users,t1.GroupName,t1.GroupDescription, COUNT(t1.Username) AS N_Users FROM (SELECT Grps.GroupName,Username,Grps.GroupDescription FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName) AS t1 LEFT OUTER JOIN (SELECT count(CVEUserCreate) AS NUM, Username FROM Users LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = Users.Username GROUP BY Users.Username) AS t2 ON t1.Username = t2.Username GROUP BY t1.GroupName,t1.GroupDescription HAVING (t1.GroupName = (SELECT UserJoinGroup.GroupName FROM UserJoinGroup WHERE UserJoinGroup.Username="${req.user.Username}"))`);
   let badges = await getGeneralQuery(connection,`SELECT * FROM (SELECT COUNT(Badges.BadgeName) AS CB,Badges.BadgeName FROM Badges,HasBadge WHERE HasBadge.GroupName = "${group[0].GroupName}" AND HasBadge.BadgeName = Badges.BadgeName GROUP BY BadgeName) AS t1, Badges WHERE t1.BadgeName = Badges.BadgeName`)
 

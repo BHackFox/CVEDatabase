@@ -38,7 +38,7 @@ route.get("/",async (req,res)=>{
 route.get("/:user", async(req,res)=>{
   req.session.redirect = "/user/"+req.params.user
   let data = await getGeneralQuery(connection,`SELECT * FROM (SELECT Users.Username, Users.Email, Persona.Name, Persona.Surname FROM Users, Persona WHERE Users.Username=Persona.Username) AS t1 LEFT OUTER JOIN CVE ON CVEUserCreate=t1.Username WHERE t1.Username="${req.params.user}" ORDER BY TimeCreation DESC`);
-  let group = await getGeneralQuery(connection,`SELECT UserJoinGroup.GroupName FROM UserJoinGroup WHERE UserJoinGroup.Username="${req.params.user}"`)
+  let group = await getGeneralQuery(connection,`SELECT GroupName FROM UserGroup WHERE Username="${req.params.user}"`)
   let user = false;
   if(req.user){
     user = req.user;
