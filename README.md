@@ -20,24 +20,20 @@
 ## Descrizione Progetto
 
 Si vuole realizzare una base di dati di una piattaforma di CVE (Common Vulnerabilities and Exposures).
-
-CVE Database è una piattaforma web che permette di visualizzare e postare vulnerabilità informatiche di qualsiasi tipo. Ogni utente registrato avrà modo di creare il proprio CVE visualizzabile in maniera gratuita e disponibile a tutti. Ogni CVE è caratterizzato da un un titolo e una descrizione che cercano di spiegare in maniera più esaustiva possibile di cosa tratta la vulnerabilità esposta. Ogni CVE ha anche una raccolta di tag creati dagli utenti per facilitare la ricerca per corrispondenze comuni. Ogni tag è composto da un nome e descrizione che lo illustrano brevemente, un'indicazione sul sistema operativo, sul liguaggio informatico utilizzato e sul type, se local o remote. Ad esempio il tag #wordpress comprenderà il sistema operativo linux, il linguaggio informatico PHP e type remote.
-
+CVE Database è una piattaforma web che permette di visualizzare e postare vulnerabilità informatiche di qualsiasi tipo. Ogni utente registrato avrà modo di creare il proprio CVE visualizzabile in maniera gratuita e disponibile a tutti. Ogni CVE è caratterizzato da  un titolo e una descrizione che cercano di spiegare in maniera più esaustiva possibile di cosa tratta la vulnerabilità esposta. Ogni CVE ha anche una raccolta di tag creati dagli utenti per facilitare la ricerca per corrispondenze comuni. Ogni tag è composto da un nome e descrizione che lo illustrano brevemente, un'indicazione sul sistema operativo, sul liguaggio informatico utilizzato e sul type, se local o remote. Ad esempio il tag #wordpress comprenderà il sistema operativo linux, il linguaggio informatico PHP e type remote.
 Ogni utente, per poter postare un CVE, deve necessariamente creare un account o di tipo Lite, quindi gratuito, oppure Premium, a pagamento. Gli utenti Lite, oltre a creare i CVE hanno la possibilità di entrare nei gruppi nei quali sono invitati. I gruppi sono solo creati dagli utenti premium e permettono di raccogliere le informazioni di tutti gli utenti che ci partecipano. Più CVE e utenti ha il gruppo e più è in cima alla classifica globale dei gruppi. Ogni utente nel gruppo ha un ruolo, definito dalla persona che lo ha invitato, che gli permette di poter modificare o meno le informazioni del gruppo, invitare e cacciare altri utenti.
-
 Gli utenti Premium possono inoltre creare i tags e verificare la validità dei vari CVE. Infatti tutti i CVE sono dichiarati non verificati finchè un utente premium non certifica le informazioni al suo interno.
-
-Ogni utente sia Lite che Premium ha la possibilità di fornire le proprie informazioni personali per aumentare le sue possibilità di essere accettato in un gruppo. Le informazioni personali comprendono nome,cognome,numero di telefono,nazionalità,città di domicilio,strada,zip code e carta d'identità. Gli utenti Premium hanno come informazione aggiuntiva la carta di credito e la data di rinnovo del pagamento. Tutti gli utenti sono caratterizzati da un username e email unici e da una password.
-
-I CVE sono caratterizzati da un nome univoco, un titolo e una descrizione, l'username dell'utente che l'ha creato, la verifica fatta dagli utenti e la data di creazione di esso.
-
+Ogni utente sia Lite che Premium ha la possibilità di fornire le proprie informazioni personali per aumentare le sue possibilità di essere accettato in un gruppo. Le informazioni personali comprendono username,nome,cognome,numero di telefono,nazionalità,città di domicilio,strada,zip code e carta d'identità. Gli utenti Premium hanno come informazione aggiuntiva la carta di credito e la data di rinnovo del pagamento. Tutti gli utenti sono caratterizzati da un username e email unici e da una password.
+Gli utenti appartenendi ad un gruppo possono invitare altri utenti non appartenenti al suo gruppo generando un invito. Un invito è caratterizzato da: l’username dell’invitato, l’username dell’invitatore, un link per poter accedere al gruppo, il nome del gruppo a cui si invita, il ruolo e la data dell’invito.
+I CVE sono inoltre caratterizzati da un nome univoco, un titolo e una descrizione, l'username dell'utente che l'ha creato, la verifica fatta dagli utenti e la data di creazione di esso.
 Ogni settimana si crea una graduatoria per i dieci migliori gruppi e viene conferito loro un badge esibito sulla pagina del gruppo.
-
+Tale graduatoria è fornita tramite il numero e il tipo di badge che il gruppo possiede. Della graduatoria ci interessa sapere la data e il numero di gruppi partecipanti.
 I gruppi sono caratterizzati da un nome univoco, da una descrizione e dalla data di creazione del gruppo.
-
-I badges sono caratterizzati da un nome univoco, dalla posizione in classifica, la data di creazione e un link ad un'immagine che lo rappresenta.
-
-Ogni gruppo inoltre ha la possibilità di visualizzare un log degli eventi degli utenti appartenenti ad esso categorizzato per tipo di evento. Gli eventi possono essere del tipo CVE, quando un utente posta un CVE, JOIN, quando un utente entra nel gruppo, e INVITE, quando un membro invita un utente a partecipare al gruppo.
+I badges sono caratterizzati da un nome univoco, dal tipo di badge, la data di creazione e un link ad un'immagine che lo rappresenta.
+Ogni gruppo inoltre ha la possibilità di visualizzare un log degli eventi degli utenti appartenenti ad esso categorizzato per tipo di evento. Gli eventi possono essere del tipo CVE, quando un utente posta o rimuove un CVE, JOIN, quando un utente entra nel gruppo, e INVITE, quando un membro invita un utente a partecipare al gruppo. Ogni evento è inoltre caratterizzato dalla data di creazione  e dall’username che genera l’evento.
+Gli eventi possono generare dei badge ai gruppi a cui sono collegati in base ai CVE totali, al numero dei partecipanti e di quanti tag crea il gruppo.
+Ogni utente è inoltre in grado di chattare con gli altri utenti appartenenti al suo gruppo.
+La chat è caratterizzata da un id univoco, dal gruppo di appartenenza, l’utente che manda il messaggio e il tempo di invio.
 
 ## Installazione ed Esecuzione
 
