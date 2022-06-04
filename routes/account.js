@@ -36,7 +36,7 @@ route.get("/group",async(req,res)=>{
 
   let users = await getGeneralQuery(connection,`SELECT t2.Username, t2.NUM, t3.UserRole, t3.UserTimeJoin FROM (SELECT t1.Username,COUNT(CVE.CVEUserCreate) AS NUM FROM (SELECT UserJoinGroup.Username,UserJoinGroup.UserRole,UserJoinGroup.UserTimeJoin FROM Grps,UserJoinGroup WHERE Grps.GroupName = UserJoinGroup.GroupName AND UserJoinGroup.GroupName = "${group[0].GroupName}") AS t1 LEFT OUTER JOIN CVE ON CVE.CVEUserCreate = t1.Username GROUP BY t1.Username) AS t2,UserJoinGroup AS t3 WHERE t3.Username = t2.Username ORDER BY t3.UserTimeJoin`);
 
-  let events = await getGeneralQuery(connection,`SELECT * FROM GroupEvents,UserJoinGroup WHERE GroupEvents.EventUser = UserJoinGroup.Username AND UserJoinGroup.GroupName = "${group[0].GroupName}" AND GroupEvents.EventTime +1 > UserJoinGroup.UserTimeJoin`)
+  let events = await getGeneralQuery(connection,`SELECT * FROM GroupEvents,UserJoinGroup WHERE GroupEvents.EventUser = UserJoinGroup.Username AND UserJoinGroup.GroupName = "${group[0].GroupName}" AND GroupEvents.EventTime +1 > UserJoinGroup.UserTimeJoin ORDER BY EventTime`)
   let lim = `LIMIT 10`;
   if (req.query.view && req.query.view > 1 && req.query.view < 100) {
     lim = `LIMIT ${req.query.view}`;

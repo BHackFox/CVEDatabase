@@ -16,6 +16,7 @@ body {
   padding-bottom: 6rem;
   min-height: 100%;
   font-family: "Helvetica Neue", Arial, sans-serif;
+  
 }
 .row{
   display: flex;
@@ -37,4 +38,10 @@ body {
 
 .zoom:hover {
   transform: scale(4.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.grad {
+  background: linear-gradient(to bottom, #333, #333 50%, #eee 75%, #333 75%);
+  height: 100%;
+  background-size: 50%
 }

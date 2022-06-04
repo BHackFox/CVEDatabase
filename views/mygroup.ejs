@@ -87,11 +87,12 @@
         <td nowrap="nowrap" align="left" valign="top">
           <%for (var i = 0; i < users.length; i++) {%>
             <div class="dropdown">
-              <div class="center" onmouseover="apiUser('<%= users[i].Username %>','<%=i%>')">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
+              <div class="center"">&bull; <a href="/user/<%=users[i].Username%>"><%=users[i].Username%></a></div>
               <div class="dropdown-content" id="<%=i%>"></div>
             </div>
           <%}%>
         </td>
+        <!-- onmouseover="apiUser('<%= users[0].Username %>','<%=i%>')" -->
         <td nowrap="nowrap" align="left" valign="top">
           <%for (var i = 0; i < users.length; i++) {%>
           <div class="center">&bull; <%=users[i].UserRole%></div>
